@@ -8,7 +8,7 @@
     fic-mode            ;;Show FIXME/TODO/BUG/KLUDGE in special face only in comments and strings
     epl                 ;;Emacs Package Library
     ecb                 ;;a code browser for Emacs
-    charmap             ;;Unicode table for Emacs
+    ;charmap             ;;Unicode table for Emacs -- sadly quite buggy
     bash-completion 	;;BASH completion for the shell buffer
     dash                ;;A modern list library for Emacs
     discover            ;;discover more of Emacs
@@ -19,7 +19,7 @@
     icicles             ;;Minibuffer input completion and cycling.
     magit               ;;Git from Emacs
     pep8                ;;run the python pep8 checker putting hits in a grep buffer
-    pylint              ;;minor mode for running `pylint'
+    ;pylint              ;;minor mode for running `pylint' (superseded  by flycheck)
     rainbow-mode          ;;Colorize color names in buffers
     rainbow-delimiters  ;;Highlight nested parens, brackets, braces a different color at each depth.
     slime               ;;Superior Lisp Interaction Mode for Emacs
