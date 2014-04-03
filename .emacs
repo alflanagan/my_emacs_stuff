@@ -6,6 +6,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
+ '(autopair-autowrap t)
+ '(autopair-global-mode t)
  '(column-number-mode t)
  '(confirm-kill-emacs nil)
  '(custom-enabled-themes (quote (tango)))
