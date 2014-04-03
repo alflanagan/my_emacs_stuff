@@ -38,6 +38,8 @@
 (add-hook 'python-mode-hook 'auto-complete-mode)
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 
 (provide 'init)
 ;;; init.el ends here
