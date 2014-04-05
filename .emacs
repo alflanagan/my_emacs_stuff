@@ -10,8 +10,8 @@
  '(autopair-global-mode t)
  '(column-number-mode t)
  '(confirm-kill-emacs nil)
- '(custom-enabled-themes (quote (tango)))
- '(custom-safe-themes (quote ("11d069fbfb0510e2b32a5787e26b762898c7e480364cbc0779fe841662e4cf5d" default)))
+ '(custom-enabled-themes (quote (zenburn)))
+ '(custom-safe-themes (quote ("a53714de04cd4fdb92ed711ae479f6a1d7d5f093880bfd161467c3f589725453" "11d069fbfb0510e2b32a5787e26b762898c7e480364cbc0779fe841662e4cf5d" default)))
  '(delete-by-moving-to-trash t)
  '(ecb-major-modes-show-or-hide (quote ((python))))
  '(ecb-options-version "2.40")
@@ -28,6 +28,7 @@
  '(python-check-command "pylint")
  '(python-skeleton-autoinsert t)
  '(python-use-skeletons t)
+ '(semantic-mode t)
  '(speedbar-track-mouse-flag t)
  '(tab-always-indent nil)
  '(track-eol t)
@@ -43,7 +44,6 @@
  ;; If there is more than one, they won't work right.
  )
 
-(require 'cl-lib)
 (load-file "~/.emacs-site.el")
 (if (boundp 'dropbox-location) 
     (load-file (concat dropbox-location "/emacs/init.el"))
