@@ -32,14 +32,19 @@
     (defun do-sync-packages() (load-file (concat dropbox-location "/emacs/sync_packages.el")))
     (defun do-sync-packages() (load-file "~/Dropbox/emacs/sync_packages.el")))
 
+(defun add-hooks-for-packages ()
+  "Set up hooks which depend on packages that may not be synched on startup"
+  (progn
+    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+    (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
+    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'python-mode-hook 'flycheck-mode)
+    (add-hook 'python-mode-hook 'auto-complete-mode)
+    )
+)
+
 (add-hook 'after-init-hook 'do-sync-packages)
-
-(add-hook 'python-mode-hook 'flycheck-mode)
-(add-hook 'python-mode-hook 'auto-complete-mode)
-
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'after-nit-hook 'add-hooks-for-packages)
 
 (provide 'init)
 ;;; init.el ends here
