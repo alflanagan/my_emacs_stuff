@@ -48,3 +48,5 @@
 (if (boundp 'dropbox-location) 
     (load-file (concat dropbox-location "/emacs/init.el"))
         (load-file "~/Dropbox/emacs/init.el"))
+
+(server-start)
