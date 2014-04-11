@@ -17,6 +17,7 @@
  '(ecb-options-version "2.40")
  '(fci-rule-color "#383838")
  '(global-auto-complete-mode t)
+ '(global-discover-mode t)
  '(global-ede-mode t)
  '(ido-enable-flex-matching t)
  '(ido-mode (quote both) nil (ido))
