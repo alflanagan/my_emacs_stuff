@@ -5,13 +5,15 @@
   '(autopair            ;;Automagically pair braces and quotes like TextMate
     zenburn-theme       ;;A low contrast color theme for Emacs.
     flycheck            ;;On-the-fly syntax checking (Flymake done right)
-    fic-mode            ;;Show FIXME/TODO/BUG/KLUDGE in special face only in comments and strings
+    ;fic-mode            ;;Show FIXME/TODO/BUG/KLUDGE... (not working; why?)
+    fic-ext-mode        ;;Show FIXME/TODO/BUG/KLUDGE... in special face only in comments and strings
     epl                 ;;Emacs Package Library
     ecb                 ;;a code browser for Emacs
     ;charmap             ;;Unicode table for Emacs -- sadly quite buggy
     bash-completion 	;;BASH completion for the shell buffer
     dash                ;;A modern list library for Emacs
     discover            ;;discover more of Emacs
+    goto-chg            ;;goto last change
     python-environment  ;;virtualenv API for Emacs Lisp
     jedi                ;;Python auto-completion for Emacs
     git-commit-mode     ;;Major mode for editing git commit messages
