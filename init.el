@@ -25,12 +25,9 @@
 ;;; Code:
 
 (filesets-init)
-(require 'cl-lib)
 
-;;TODO: set up dropbox location in .emacs-site.el
-(if (boundp 'dropbox-location)
-    (defun do-sync-packages() (load-file (concat dropbox-location "/emacs/sync_packages.el")))
-    (defun do-sync-packages() (load-file "~/Dropbox/emacs/sync_packages.el")))
+(if (boundp 'emacs-sync-directory)
+    (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el"))))
 
 (defun add-hooks-for-packages ()
   "Set up hooks which depend on packages that may not be synched on startup"
@@ -46,5 +43,4 @@
 (add-hook 'after-init-hook 'do-sync-packages)
 (add-hook 'after-nit-hook 'add-hooks-for-packages)
 
-(provide 'init)
 ;;; init.el ends here
