@@ -4,7 +4,7 @@
 ;; Author: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
 ;; Maintainer: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
 ;; Created: 2014
-;; Version: 0.01
+;; Version: 0.02
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,9 +35,12 @@
     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
     (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
     (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'emacs-lisp-mode-hook 'fic-ext-mode)
+
     (add-hook 'python-mode-hook 'flycheck-mode)
     (add-hook 'python-mode-hook 'auto-complete-mode)
-    )
+    (add-hook 'python-mode-hook 'fic-ext-mode)
+   )
 )
 
 (add-hook 'after-init-hook 'do-sync-packages)
