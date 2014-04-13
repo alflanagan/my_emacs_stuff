@@ -34,8 +34,6 @@
     python-environment  ;;virtualenv API for Emacs Lisp
     rainbow-delimiters  ;;Highlight nested parens, brackets, braces a different color at each depth.
     rainbow-mode        ;;Colorize color names in buffers
-    slime               ;;Superior Lisp Interaction Mode for Emacs
-    slime-repl          ;;Read-Eval-Print Loop written in Emacs Lisp
     zenburn-theme       ;;A low contrast color theme for Emacs.
 )
   "List of packages to verify at launch.")
