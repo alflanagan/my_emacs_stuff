@@ -46,8 +46,9 @@
  )
 
 (load-file "~/.emacs-site.el")
-(if (boundp 'dropbox-location) 
-    (load-file (concat dropbox-location "/emacs/init.el"))
-        (load-file "~/Dropbox/emacs/init.el"))
+
+(when (boundp 'emacs-sync-directory)
+  (load-file (concat emacs-sync-directory "init.el"))
+)
 
 (server-start)
