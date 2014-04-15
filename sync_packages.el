@@ -7,7 +7,7 @@
 (require 'cl-lib)
 
 ;; Guarantee all packages are installed on start
-(defvar packages-list
+(defvar sync-packages-list
   '(
     arduino-mode          ;;Major mode for the Arduino language
     autopair            ;;Automagically pair braces and quotes like TextMate
@@ -38,11 +38,18 @@
 )
   "List of packages to verify at launch.")
 
-;;replaced ugly common-lisp macro form from source with
+(defun reduce-and (a_list)
+  "Reduce a list using and -- i.e. return nil if any element is nil, else return last element"
+  ;;only needed because you can't (apply 'and (...))
+  (if (null a_list)
+      t
+    (and (car a_list) (reduce-and (cdr a_list)))
+    )
+  )
+			    
 (defun has-package-not-installed ()
-  "Define a version of has-package-not-installed which does not use ugly cl macros."
-  ;;except reduce, that is. haven't found a replacement.
-  (cl-reduce (lambda (a b) (and a b))  (mapcar 'package-installed-p packages-list))
+  "Returns t if any package in sync-packages-list is not actually installed"
+  (not (reduce-and (mapcar 'package-installed-p sync-packages-list)))
 )
 
 (when (has-package-not-installed)
@@ -54,7 +61,7 @@
   (mapc (lambda (p) (if (not (package-installed-p p))
                         (package-install p))
           )
-        packages-list)
+        sync-packages-list)
   )
 
 (provide 'sync-packages)
