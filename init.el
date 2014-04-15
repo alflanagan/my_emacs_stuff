@@ -24,27 +24,28 @@
 
 ;;; Code:
 
-(filesets-init)
+;;(filesets-init)
 
 (when (boundp 'emacs-sync-directory)
-    (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
-    (add-hook 'after-init-hook 'do-sync-packages)
+ (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
+ (add-hook 'after-init-hook 'do-sync-packages)
 )
 
-(defun add-hooks-for-packages ()
-  "Set up hooks which depend on packages that may not be synched on startup"
-  (progn
-    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-    (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
-    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'emacs-lisp-mode-hook 'fic-ext-mode)
+;; (defun add-hooks-for-packages ()
+;;   "Set up hooks which depend on packages that may not be synched on startup"
+;;   (progn
+;;     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+;;     (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
+;;     (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+;;     (add-hook 'emacs-lisp-mode-hook 'fic-ext-mode)
 
-    (add-hook 'python-mode-hook 'flycheck-mode)
-    (add-hook 'python-mode-hook 'auto-complete-mode)
-    (add-hook 'python-mode-hook 'fic-ext-mode)
-   )
-)
+;;     (add-hook 'python-mode-hook 'flycheck-mode)
+;;     (add-hook 'python-mode-hook 'auto-complete-mode)
+;;     (add-hook 'python-mode-hook 'fic-ext-mode)
+;;    )
+;; )
 
-(add-hook 'after-init-hook 'add-hooks-for-packages)
+;; (add-hook 'after-init-hook 'add-hooks-for-packages)
+
 
 ;;; init.el ends here
