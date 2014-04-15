@@ -32,11 +32,18 @@
     jedi                ;;Python auto-completion for Emacs
     magit               ;;Git from Emacs
     markdown-mode       ;;Emacs Major mode for Markdown-formatted text files
+    paradox             ;;Display Package Ratings on the *Packages* buffer.
     pep8                ;;run the python pep8 checker putting hits in a grep buffer
     ;pylint             ;;minor mode for running `pylint' (superseded  by flycheck)
     python-environment  ;;virtualenv API for Emacs Lisp
     rainbow-delimiters  ;;Highlight nested parens, brackets, braces a different color at each depth.
     rainbow-mode        ;;Colorize color names in buffers
+    starter-kit           ;;Saner defaults and goodies.
+    starter-kit-bindings ;;Saner defaults and goodies: bindings
+    starter-kit-eshell  ;; Saner defaults and goodies: eshell tweaks
+    starter-kit-js        ;;Saner defaults and goodies for Javascript
+    starter-kit-lisp      ;;Saner defaults and goodies for lisp languages
+    starter-kit-ruby      ;;Saner defaults and goodies for Ruby
     zenburn-theme       ;;A low contrast color theme for Emacs.
 )
   "List of packages to verify at launch.")
