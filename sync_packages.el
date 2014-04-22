@@ -19,17 +19,16 @@
     ;; fuzzy               ;;dependency of elpy
     ;; elpy                ;;Emacs Python Development Environment
     ;; epl                 ;;Emacs Package Library
-    ;; fic-ext-mode        ;;Show FIXME/TODO/BUG/KLUDGE... in special face only in comments and strings
     flycheck            ;;On-the-fly syntax checking (Flymake done right)
     ;; goto-chg            ;;goto last change
     ;; icicles             ;;Minibuffer input completion and cycling.
     ;; epc                 ;;dependency of jedi
     ;; jedi                ;;Python auto-completion for Emacs
-    ;; markdown-mode       ;;Emacs Major mode for Markdown-formatted text files
+    markdown-mode       ;;Emacs Major mode for Markdown-formatted text files
     paradox             ;;Display Package Ratings on the *Packages* buffer.
     ;; pep8                ;;run the python pep8 checker putting hits in a grep buffer
     ;; python-environment  ;;virtualenv API for Emacs Lisp
-    ;; rainbow-delimiters  ;;Highlight nested parens, brackets, braces a different color at each depth.
+    rainbow-delimiters  ;;Highlight nested parens, brackets, braces a different color at each depth.
     ;; rainbow-mode        ;;Colorize color names in buffers
     starter-kit           ;;Saner defaults and goodies.
     starter-kit-bindings ;;Saner defaults and goodies: bindings
