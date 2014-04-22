@@ -26,11 +26,6 @@
 
 ;;(filesets-init)
 
-(when (boundp 'emacs-sync-directory)
- (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
- (add-hook 'after-init-hook 'do-sync-packages)
-)
-
 (defun add-hooks-for-packages ()
   "Set up hooks which depend on packages that may not be synched on startup"
   (add-hook 'sh-mode-hook '(turn-off-auto-fill))
@@ -45,5 +40,11 @@
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
+;;We need do-sync-packages to run *before* add-hooks-for-packages
+;;so we have to add it to hook *after*
+(when (boundp 'emacs-sync-directory)
+ (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
+ (add-hook 'after-init-hook 'do-sync-packages)
+)
 
 ;;; init.el ends here
