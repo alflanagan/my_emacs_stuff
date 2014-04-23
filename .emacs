@@ -15,6 +15,7 @@
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
+ '(dash-enable-fontlock t)
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

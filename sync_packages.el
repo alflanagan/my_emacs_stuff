@@ -13,7 +13,8 @@
     ;; autopair            ;;Automagically pair braces and quotes like TextMate
     ;; bash-completion     ;;BASH completion for the shell buffer
     ;; cython-mode         ;;Major mode for editing Cython files
-    ;; dash                ;;A modern list library for Emacs
+    dash                ;;A modern list library for Emacs
+    dash-functional        ;;Collection of useful combinators for Emacs Lisp
     ;; discover            ;;discover more of Emacs
     ;; ecb                 ;;a code browser for Emacs
     ;; fuzzy               ;;dependency of elpy
