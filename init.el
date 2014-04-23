@@ -4,7 +4,7 @@
 ;; Author: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
 ;; Maintainer: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
 ;; Created: 2014
-;; Version: 0.01
+;; Version: 0.02
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,22 +24,27 @@
 
 ;;; Code:
 
-(filesets-init)
-(require 'cl-lib)
+;;(filesets-init)
 
-;;TODO: set up dropbox location in .emacs-site.el
-(if (boundp 'dropbox-location)
-    (defun do-sync-packages() (load-file (concat dropbox-location "/emacs/sync_packages.el")))
-    (defun do-sync-packages() (load-file "~/Dropbox/emacs/sync_packages.el")))
+(defun add-hooks-for-packages ()
+  "Set up hooks which depend on packages that may not be synched on startup"
+  (add-hook 'sh-mode-hook '(turn-off-auto-fill))
+  ;;because I find it annoying for shell scripts
+  
+  ;; (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 
-(add-hook 'after-init-hook 'do-sync-packages)
+  (add-hook 'python-mode-hook 'flycheck-mode)
+  ;; (add-hook 'python-mode-hook 'auto-complete-mode)
+)
 
-(add-hook 'python-mode-hook 'flycheck-mode)
-(add-hook 'python-mode-hook 'auto-complete-mode)
+(add-hook 'after-init-hook 'add-hooks-for-packages)
 
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+;;We need do-sync-packages to run *before* add-hooks-for-packages
+;;so we have to add it to hook *after*
+(when (boundp 'emacs-sync-directory)
+ (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
+ (add-hook 'after-init-hook 'do-sync-packages)
+)
 
-(provide 'init)
 ;;; init.el ends here
