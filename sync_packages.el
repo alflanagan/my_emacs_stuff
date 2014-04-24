@@ -27,7 +27,9 @@
     ;; jedi                ;;Python auto-completion for Emacs
     markdown-mode       ;;Emacs Major mode for Markdown-formatted text files
     paradox             ;;Display Package Ratings on the *Packages* buffer.
-    ;; pep8                ;;run the python pep8 checker putting hits in a grep buffer
+    ;; pep8                ;;run the python pep8 checker putting hits
+    ;; in a grep buffer
+    popup               ;;Visual Popup User Interface
     ;; python-environment  ;;virtualenv API for Emacs Lisp
     rainbow-delimiters  ;;Highlight nested parens, brackets, braces a different color at each depth.
     ;; rainbow-mode        ;;Colorize color names in buffers
