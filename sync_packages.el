@@ -14,7 +14,8 @@
     ;; autopair            ;;Automagically pair braces and quotes like TextMate
     ;; bash-completion     ;;BASH completion for the shell buffer
     ;; cython-mode         ;;Major mode for editing Cython files
-    ;; dash                ;;A modern list library for Emacs
+    dash                ;;A modern list library for Emacs
+    dash-functional        ;;Collection of useful combinators for Emacs Lisp
     ;; discover            ;;discover more of Emacs
     ;; ecb                 ;;a code browser for Emacs
     ;; fuzzy               ;;dependency of elpy
@@ -28,9 +29,11 @@
     ;; jedi                ;;Python auto-completion for Emacs
     know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations,
     ;;status codes
-    markdown-mode          ;;Emacs Major mode for Markdown-formatted text files
     paradox                ;;Display Package Ratings on the *Packages* buffer.
+    markdown-mode       ;;Emacs Major mode for Markdown-formatted text files
+    paradox             ;;Display Package Ratings on the *Packages* buffer.
     ;; pep8                ;;run the python pep8 checker putting hits in a grep buffer
+    popup               ;;Visual Popup User Interface
     ;; python-environment  ;;virtualenv API for Emacs Lisp
     rainbow-delimiters     ;;Highlight nested parens, brackets, braces a different color
     ;;at each depth.

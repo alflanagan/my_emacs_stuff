@@ -47,4 +47,7 @@
  (add-hook 'after-init-hook 'do-sync-packages)
 )
 
+;(eval-after-load "dash" 'dash-enable-font-lock)
+
+
 ;;; init.el ends here
