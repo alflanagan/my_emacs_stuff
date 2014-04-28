@@ -11,11 +11,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(dash-enable-fontlock t)
+ '(global-semantic-highlight-func-mode t)
+ '(global-semantic-idle-breadcrumbs-mode t nil (semantic/idle))
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
- '(dash-enable-fontlock t)
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
