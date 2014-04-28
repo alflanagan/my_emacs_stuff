@@ -49,7 +49,6 @@
 
 ;(eval-after-load "dash" 'dash-enable-font-lock)
 (require 'eldoc) 
-(require 'paredit)
 (eldoc-add-command
  'paredit-backward-delete
  'paredit-close-round)
