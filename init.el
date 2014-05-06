@@ -28,7 +28,7 @@
 
 (defun add-hooks-for-packages ()
   "Set up hooks which depend on packages that may not be synched on startup"
-  (add-hook 'sh-mode-hook '(turn-off-auto-fill))
+  (add-hook 'sh-mode-hook '(auto-fill-mode -1))
   ;;because I find it annoying for shell scripts
   
   ;; (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
@@ -53,4 +53,5 @@
  'paredit-backward-delete
  'paredit-close-round)
 
+(server-start)
 ;;; init.el ends here
