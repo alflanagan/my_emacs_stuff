@@ -4,6 +4,8 @@
 (defun parse-bookmark-file (file-name) nil)
 (require 'json)
 (require 'time-date)
+(require 'cl-lib)  ;;OK, maybe CL isn't all bad
+
 
 (defconst test-bookmarks-file "bookmarks-2014-04-25.json"
   "A Firefox JSON export file for testing purposes")
@@ -40,20 +42,13 @@
         (format-moz-time-iso-8601  any-value)
         (t any-value)))
 
-(defun remove-nils (some-list)
-  "Returns a copy of some-list with any nil elements removed."
-  (let ((new-list ()))
-    (mapc (lambda (x) (if (not (null x) (append new-list (list x))))) some-list)
-    some-list)
-  )
-
-(remove-nils '(1 2 3 nil 4 nil 5))
 (defun my-output (&rest output-values)
   "Output text  by writing to my custom buffer"
   (setq outbuffer  (get-buffer-create "*experiments*"))
-  (let ((output-strings (mapcar `make-string output-values)))
-    (setq output-strings (remove-nils output-strings))
-    (with-current-buffer outbuffer (goto-char (point-max)) (mapcar `insert output-strings) (insert "\n"))))
+  (let ((output-strings (mapcar 'make-string output-values)))
+    (setq output-strings (cl-remove-if 'null output-strings))
+    (princ (type-of output-strings))
+    (with-current-buffer outbuffer (goto-char (point-max)) (mapcar 'insert output-strings) (insert "\n"))))
 
 (defun handle-bookmark (bookmark)
   ;;bookmark is a dotted pair
