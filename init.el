@@ -53,5 +53,12 @@
  'paredit-backward-delete
  'paredit-close-round)
 
-(server-start)
+;;don't call server-start if server is already running
+;;test pulled from server.el
+(require 'server)
+(let ((file (expand-file-name "server"
+				(if server-use-tcp
+				    server-auth-dir
+				  server-socket-dir))))
+  (if (not (file-exists-p file)) (server-start)))
 ;;; init.el ends here
