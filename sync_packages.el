@@ -30,9 +30,9 @@
     ;; tern-auto-complete     ;;Tern Completion by auto-complete.el
     dash                   ;;A modern list library for Emacs
     ;;dash-functional        ;;Collection of useful combinators for Emacs Lisp
-    el-get                 ;;Manage the external elisp bits and pieces you depend upon
+    ;;el-get                 ;;Manage the external elisp bits and pieces you depend upon
     flycheck               ;;On-the-fly syntax checking (Flymake done right)
-    know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
+    ;;know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
     markdown-mode          ;;Emacs Major mode for Markdown-formatted text files
     paradox                ;;Display Package Ratings on the *Packages* buffer.
     popup                  ;;Visual Popup User Interface
