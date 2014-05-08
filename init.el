@@ -32,11 +32,21 @@
   ;;because I find it annoying for shell scripts
   
   ;; (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              ;; Use spaces, not tabs.
+              (setq indent-tabs-mode nil)
+              ;; Recompile if .elc exists.
+              (add-hook (make-local-variable 'after-save-hook)
+                        (lambda ()
+                          (byte-force-recompile default-directory)))
+              (define-key emacs-lisp-mode-map
+                "\r" 'reindent-then-newline-and-indent)
+              (rainbow-delimiters-mode)))
+  
   (add-hook 'python-mode-hook 'flycheck-mode)
   ;; (add-hook 'python-mode-hook 'auto-complete-mode)
-)
+  )
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
@@ -61,4 +71,6 @@
 				    server-auth-dir
 				  server-socket-dir))))
   (if (not (file-exists-p file)) (server-start)))
+
+
 ;;; init.el ends here
