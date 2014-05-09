@@ -79,7 +79,12 @@ reasonable value, as float otherwise"
 
 (defun my-output-strings (&rest output-strings)
   "Write a list of strings to the output buffer *experiments*"
-  (mapc 'my-output-string output-strings)
+  (let ((outputbuffer (get-buffer-create "*experiments*")))
+    (with-current-buffer outputbuffer
+      (goto-char (point-max))
+      (mapc 'insert output-strings)
+      )
+    )
   )
 
 ;;(my-output-strings "fred" "barney" "wilma") --> fredbarneywilma
