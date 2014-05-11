@@ -45,7 +45,7 @@ reasonable value, as float otherwise"
 ;;(fuzzy-float-string  2147449999999999.0) ==> "2038-01-18T12:53:19-0500"
 ;;(fuzzy-float-string  2147450000000000.0) ==> "2.14745e+15"
 
-(defun make-string (any-value)
+(defun my-make-output-string (any-value)
   "Format any-value into a string. (Surely there's a standard function for this?)"
   (cond ((equal (type-of any-value) 'string)
           any-value)
@@ -58,11 +58,11 @@ reasonable value, as float otherwise"
         )
   )
 
-;;(make-string "title") ==> "title"
-;;(make-string 7) ==> "7"
-;;(make-string 7.0) ==> "7.0"
-;;(make-string 1137450000000000.0) ==> "2006-01-16T17:20:00-0500"
-;;(make-string '(1 2)) ==> "unknown type"
+;;(my-make-output-string "title") ==> "title"
+;;(my-make-output-string 7) ==> "7"
+;;(my-make-output-string 7.0) ==> "7.0"
+;;(my-make-output-string 1137450000000000.0) ==> "2006-01-16T17:20:00-0500"
+;;(my-make-output-string '(1 2)) ==> "unknown type"
 
 (defun my-output-string (a-string)
   "Writes a single string or character to the output-buffer *experiments*"
@@ -89,25 +89,80 @@ reasonable value, as float otherwise"
 
 ;;(my-output-strings "fred" "barney" "wilma") --> fredbarneywilma
 
-(defun my-output (&rest output-values)
+(defun my-output
+    (&rest output-values)
   "Output text  by writing to my custom buffer"
-  (setq outbuffer  (get-buffer-create "*experiments*"))
-  (let ((output-strings (mapcar 'make-string output-values)))
-    (setq output-strings (cl-remove-if 'null output-strings))
-    (with-current-buffer outbuffer (goto-char (point-max)) (mapc 'insert output-strings) (insert "\n"))))
+  (let
+      ((output-strings
+        (mapcar 'my-make-output-string output-values)))
+    (setq output-strings
+          (cl-remove-if 'null output-strings))
+    (apply 'my-output-strings output-strings)))
+
+
+;;; bookmarklet for displaying bookmark json files in browser:
+;; javascript:
+;; (function(){var E=document.getElementsByTagName('PRE')[0],
+;;          T=E.innerHTML,
+;;          i=0,r1,r2;
+;;          t=new Array();
+;;          while(/("uri":"([^"]*)")/g.exec(T)){
+;;            r1=RegExp.$1;
+;;            r2=RegExp.$2;
+;;            if(/^https?:/.exec(r2)){
+;;              t[i++]='['+(i)+']:<a href='+r2+'>'+r2+'<\/a>';
+;;            }
+;;          } with (window.open().document){
+;;            for(i=0;t[i];i++)
+;;              write(t[i]+'<br>');
+;;            close();
+;;          }}
+;; )();
+
 
 (defun handle-bookmark (bookmark)
   ;;bookmark is a dotted pair
   (if (not (atom (cdr bookmark))) (error "Argument must be dotted pair, got %s" (type-of bookmark)))
   (pcase (car bookmark)
-    (`title (my-output "Title is " (cdr bookmark)))
-    (`id  (my-output "ID is " (number-to-string (cdr bookmark))))
-    (`dateAdded  (my-output "Date added is " (format-moz-time-iso-8601 (cdr bookmark) )))
-    (`lastModified (my-output "Date modified is " (format-moz-time-iso-8601 (cdr bookmark) )))
-    (`root (my-output "root is " (cdr bookmark)))
-    (`type (my-output "type is " (cdr bookmark)))
-    (`children (my-output "children " (number-to-string (length (cdr bookmark))))))
+    (`title (my-output "Title is " (cdr bookmark) "\n"))
+    (`id  (my-output "ID is " (number-to-string (cdr bookmark)) "\n"))
+    (`dateAdded  (my-output "Date added is " (format-moz-time-iso-8601 (cdr bookmark)) "\n"))
+    (`lastModified (my-output "Date modified is " (format-moz-time-iso-8601 (cdr bookmark)) "\n"))
+    (`root (my-output "root is " (cdr bookmark) "\n"))
+    (`type (my-output "type is " (cdr bookmark) "\n")
+           (if (equal (cdr bookmark) "text/x-moz-place")
+               (my-output "found place")))
+    ;; type serves to distinguish 'object' classes
+    ;; Known values:
+    ;;  1 (looks like internal directives: read-only?)
+    ;;  3 properties: see "name" field for which property
+    ;; text/x-moz-place -- normal bookmark entry/URL
+    ;; text/x-moz-place-container
+    ;; text/x-moz-place-separator
+
+    (`children (my-output "children " (number-to-string (length (cdr bookmark))) "\n")
+               (my-output (pp-to-string (mapcar (lambda (x) (list (car x) (cadr x))) (cdr bookmark))))
+               ))
   nil)
 
 (mapc 'handle-bookmark json-object)
 
+
+(cl-defstruct x-moz-place uri type lastModified dateAdded parent id title index)
+
+;;(make-x-moz-place) ==> [cl-struct-x-moz-place nil nil nil nil nil nil nil nil]
+;;(make-x-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
+;;                   :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
+;;                   :index 9) ==> [cl-struct-x-moz-place "http://www.example.com" "text"
+;;                   1.340392082e+15 1.340391622e+15 3860 4153 "NINA - Devbox" 9]
+
+(setq test-bookmark
+     (make-x-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
+                        :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
+                        :index 9))
+;; (setq test-bookmark2 (copy-x-moz-place test-bookmark))
+;; (x-moz-place-p test-bookmark2) ==> t
+;;(equal test-bookmark test-bookmark2) ==> t
+;;(eq test-bookmark test-bookmark2) ==> nil
+;;(x-moz-place-title test-bookmark) ==> "NINA - Devbox"
+;;(x-moz-place-type test-bookmark) ==> "text"
