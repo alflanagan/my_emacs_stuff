@@ -53,8 +53,8 @@
 ;;We need do-sync-packages to run *before* add-hooks-for-packages
 ;;so we have to add it to hook *after*
 (when (boundp 'emacs-sync-directory)
- (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
- (add-hook 'after-init-hook 'do-sync-packages)
+  (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
+  (eval-after-load 'package '(do-sync-packages))
 )
 
 ;(eval-after-load "dash" 'dash-enable-font-lock)
