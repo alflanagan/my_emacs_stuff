@@ -19,17 +19,10 @@
   "Convert mozilla time value to standard emacs (HIGH LOW USEC PSEC)"
   (seconds-to-time (/ time-value 1000000.0)))
 
-;;(lbkmk-convert-moz-time  100000000000001.0) ==> (1525 57600 0 998378)
-;;(lbkmk-convert-moz-time  100000000000001) ==> (1525 57600 0 998378)
-;;(lbkmk-convert-moz-time 0.0) ==> (0 0 0 0)
-
 (defun lbkmk-format-moz-time-iso-8601 (time-value)
   "Format time-value from mozilla JSON to ISO 8601 standard format, return as string"
   (format-time-string "%FT%T%z"  (lbkmk-convert-moz-time time-value))
   )
-
-;;(lbkmk-format-moz-time-iso-8601 0.0) ==> "1969-12-31T19:00:00-0500"
-;;(lbkmk-format-moz-time-iso-8601 (* (float-time) 1000000.0)) ==> "2014-05-06T17:57:43-0400" (YMMV)
 
 (defun lbkmk-fuzzy-float-str (any-float)
   "Format a float as a date string if it would result in a
@@ -40,11 +33,6 @@ reasonable value, as float otherwise"
            (< any-float 2.14745e15))
       (lbkmk-format-moz-time-iso-8601 any-float)
     (number-to-string any-float)))
-
-;;(lbkmk-fuzzy-float-str 7.0) ==> "7.0"
-;;(lbkmk-fuzzy-float-str  100000000000001.0) ==> "1973-03-03T04:46:40-0500"
-;;(lbkmk-fuzzy-float-str  2147449999999999.0) ==> "2038-01-18T12:53:19-0500"
-;;(lbkmk-fuzzy-float-str  2147450000000000.0) ==> "2.14745e+15"
 
 (defun lbkmk-make-str (any-value)
   "Format any-value into a string. (Surely there's a standard function for this?)"
@@ -121,32 +109,34 @@ reasonable value, as float otherwise"
 ;; )();
 
 
-(defun lbkmk-handle-bookmark (bookmark)
-  ;;bookmark is a dotted pair
-  (if (not (atom (cdr bookmark))) (error "Argument must be dotted pair, got %s" (type-of bookmark)))
-  (pcase (car bookmark)
-    (`title (lbkmk-output "Title is " (cdr bookmark) "\n"))
-    (`id  (lbkmk-output "ID is " (number-to-string (cdr bookmark)) "\n"))
-    (`dateAdded  (lbkmk-output "Date added is " (lbkmk-format-moz-time-iso-8601 (cdr bookmark)) "\n"))
-    (`lastModified (lbkmk-output "Date modified is " (lbkmk-format-moz-time-iso-8601 (cdr bookmark)) "\n"))
-    (`root (lbkmk-output "root is " (cdr bookmark) "\n"))
-    (`type (lbkmk-output "type is " (cdr bookmark) "\n")
-           (if (equal (cdr bookmark) "text/x-moz-place")
-               (lbkmk-output "found place")))
-    ;; type serves to distinguish 'object' classes
-    ;; Known values:
-    ;;  1 (looks like internal directives: read-only?)
-    ;;  3 properties: see "name" field for which property
-    ;; text/x-moz-place -- normal bookmark entry/URL
-    ;; text/x-moz-place-container
-    ;; text/x-moz-place-separator
+;; (defun lbkmk-handle-bookmark (bookmark)
+;;   ;;bookmark is a dotted pair
+;;   (if (not (atom (cdr bookmark))) (error "Argument must be dotted pair, got %s" (type-of bookmark)))
+;;   (pcase (car bookmark)
+;;     (`title (lbkmk-output "Title is " (cdr bookmark) "\n"))
+;;     (`id  (lbkmk-output "ID is " (number-to-string (cdr bookmark)) "\n"))
+;;     (`dateAdded  (lbkmk-output "Date added is " (lbkmk-format-moz-time-iso-8601 (cdr bookmark)) "\n"))
+;;     (`lastModified (lbkmk-output "Date modified is " (lbkmk-format-moz-time-iso-8601 (cdr bookmark)) "\n"))
+;;     (`root (lbkmk-output "root is " (cdr bookmark) "\n"))
+;;     (`type (lbkmk-output "type is " (cdr bookmark) "\n")
+;;            (if (equal (cdr bookmark) "text/x-moz-place")
+;;                (lbkmk-output "found place")))
+;;     ;; type serves to distinguish 'object' classes
+;;     ;; Known values:
+;;     ;;  1 (looks like internal directives: read-only?)
+;;     ;;  3 properties: see "name" field for which property
+;;     ;; text/x-moz-place -- normal bookmark entry/URL
+;;     ;; text/x-moz-place-container
+;;     ;; text/x-moz-place-separator
 
-    (`children (lbkmk-output "children " (number-to-string (length (cdr bookmark))) "\n")
-               (lbkmk-output (pp-to-string (mapcar (lambda (x) (list (car x) (cadr x))) (cdr bookmark))))
-               ))
-  nil)
+;;     (`children (lbkmk-output "children " (number-to-string (length (cdr bookmark))) "\n")
+;;                (lbkmk-output (pp-to-string (mapcar (lambda (x) (list (car x) (cadr x))) (cdr bookmark))))
+;;                ))
+;;   ;;children is a vector of lists
+;;   (lbkmk-output (pp-to-string bookmark))
+;;   nil)
 
-(mapc 'lbkmk-handle-bookmark lbkmk-json-object)
+;; (mapc 'lbkmk-handle-bookmark lbkmk-json-object)
 
 
 (cl-defstruct lbkmk-moz-place uri type lastModified dateAdded parent id title index)
@@ -167,3 +157,23 @@ reasonable value, as float otherwise"
 ;;(eq lbkmk-test-bookmark lbkmk-test-bookmark2) ==> nil
 ;;(lbkmk-moz-place-title lbkmk-test-bookmark) ==> "NINA - Devbox"
 ;;(lbkmk-moz-place-type lbkmk-test-bookmark) ==> "text"
+
+(defun lbkmk-make-lbkmk-moz-place-list (list-of-lists)
+  (let (url lastModified dateAdded parent id title index)
+    (mapc (lambda (bkmk-assoc) (pcase (car bkmk-assoc)
+                            (`title (setq title (cdr bkmk-assoc)))
+                            (`uri (setq url (cdr bkmk-assoc)))
+                            (`type (if (not (equal (cdr bkmk-assoc) "text/x-moz-place"))
+                                       (error "lbkmk-make-lbkmk-moz-place-list got record of type %s" (cdr bkmk-assoc))))
+                            (`parent (setq parent (cdr bkmk-assoc)))
+                            (`id (setq id (cdr bkmk-assoc)))
+                            (`dateAdded (setq dateAdded (cdr bkmk-assoc)))
+                            (`lastModified (setq lastKModified (cdr bkmk-assoc)))
+                            (_ (error "lbkmk-make-lbkmk-moz-place-list got alist with car of %s" (car bkmk-assoc)))
+                            )) list-of-lists)))
+
+(assert (listp lbkmk-json-object))
+(assert (listp (cdr lbkmk-json-object)))
+(assert (listp (cddr lbkmk-json-object)))
+(lbkmk-output (type-of lbkmk-json-object) (cddr lbkmk-json-object))
+;; (lbkmk-make-lbkmk-moz-place-list (aref lbkmk-json-object 1))
