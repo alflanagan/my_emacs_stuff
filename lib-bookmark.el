@@ -1,7 +1,41 @@
 ;; -*- lexical-binding: t -*-
+;;; lib-bookmark.el --- Browser bookmark file browsing & conversion
 ;; namespace prefix for this file: lbkmk-
 
-;;; for now, just a set of experimental stuff
+;; Copyright (C) 2014 A. Lloyd Flanagan
+
+;; Author: A. Lloyd Flanagan
+;; Version: 0.1
+;; Keywords: web
+
+;; This file is NOT part of GNU Emacs.
+
+;; lib-bookmark.el is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; lib-bookmark.el is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with lib-bookmark.el.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; 
+;; 
+
+;; 
+
+
+;;; History:
+
+
+;;; Code:
+
 (eval-when-compile (require 'json))
 (eval-when-compile (require 'time-date))
 (eval-when-compile (require 'cl-lib)) ;;OK, maybe CL isn't all bad
@@ -11,9 +45,20 @@
 
 (setq lbkmk-json-object (json-read-file lbkmk-test-bookmarks-file))
 
-;;clean up previous output, if any
-(with-current-buffer (get-buffer-create "*experiments*")
-  (delete-region (point-min) (point-max)) )
+(defun lbkmk-get-output-buffer ()
+  "Returns the bookmark output buffer, if it exists."
+  (get-buffer "*web_bookmarks*"))
+
+(defun lbkmk-get-create-output-buffer ()
+  "Returns the bookmark output buffer, creating it if does not exist."
+  (get-buffer-create "*web_bookmarks*"))
+
+(defun lbkmk-clear-output-buffer () 
+  ;;clean up previous output, if any
+  (with-current-buffer (lbkmk-get-create-output-buffer)
+    (delete-region (point-min) (point-max))))
+
+(lbkmk-clear-output-buffer)
 
 (defun lbkmk-convert-moz-time (time-value)
   "Convert mozilla time value to standard emacs (HIGH LOW USEC PSEC)"
@@ -21,8 +66,7 @@
 
 (defun lbkmk-format-moz-time-iso-8601 (time-value)
   "Format time-value from mozilla JSON to ISO 8601 standard format, return as string"
-  (format-time-string "%FT%T%z"  (lbkmk-convert-moz-time time-value))
-  )
+  (format-time-string "%FT%T%z"  (lbkmk-convert-moz-time time-value)))
 
 (defun lbkmk-fuzzy-float-str (any-float)
   "Format a float as a date string if it would result in a
@@ -43,40 +87,21 @@ reasonable value, as float otherwise"
         ((equal (type-of any-value) 'float)
          (lbkmk-fuzzy-float-str any-value))
         ('t
-         "unknown type")
-        )
-  )
-
-;;(lbkmk-make-str "title") ==> "title"
-;;(lbkmk-make-str 7) ==> "7"
-;;(lbkmk-make-str 7.0) ==> "7.0"
-;;(lbkmk-make-str 1137450000000000.0) ==> "2006-01-16T17:20:00-0500"
-;;(lbkmk-make-str '(1 2)) ==> "unknown type"
+         "unknown type")))
 
 (defun lbkmk-output-str (a-string)
-  "Writes a single string or character to the output-buffer *experiments*"
-  (let ((outputbuffer (get-buffer-create "*experiments*")))
+  "Writes a single string or character to the output buffer."
+  (let ((outputbuffer (lbkmk-get-create-output-buffer)))
     (with-current-buffer outputbuffer
       (goto-char (point-max))
-      (insert a-string)
-      )
-    )
-  )
-
-;;(lbkmk-output-str "fred") --> |fred
-;;(lbkmk-output-str 7) --> |^G
+      (insert a-string))))
 
 (defun lbkmk-output-strs (&rest output-strings)
   "Write a list of strings to the output buffer *experiments*"
-  (let ((outputbuffer (get-buffer-create "*experiments*")))
+  (let ((outputbuffer (lbkmk-get-create-output-buffer)))
     (with-current-buffer outputbuffer
       (goto-char (point-max))
-      (mapc 'insert output-strings)
-      )
-    )
-  )
-
-;;(lbkmk-output-strs "fred" "barney" "wilma") --> fredbarneywilma
+      (mapc 'insert output-strings))))
 
 (defun lbkmk-output
     (&rest output-values)
@@ -87,27 +112,6 @@ reasonable value, as float otherwise"
     (setq output-strings
           (cl-remove-if 'null output-strings))
     (apply 'lbkmk-output-strs output-strings)))
-
-
-;;; bookmarklet for displaying bookmark json files in browser:
-;; javascript:
-;; (function(){var E=document.getElementsByTagName('PRE')[0],
-;;          T=E.innerHTML,
-;;          i=0,r1,r2;
-;;          t=new Array();
-;;          while(/("uri":"([^"]*)")/g.exec(T)){
-;;            r1=RegExp.$1;
-;;            r2=RegExp.$2;
-;;            if(/^https?:/.exec(r2)){
-;;              t[i++]='['+(i)+']:<a href='+r2+'>'+r2+'<\/a>';
-;;            }
-;;          } with (window.open().document){
-;;            for(i=0;t[i];i++)
-;;              write(t[i]+'<br>');
-;;            close();
-;;          }}
-;; )();
-
 
 ;; (defun lbkmk-handle-bookmark (bookmark)
 ;;   ;;bookmark is a dotted pair
@@ -138,25 +142,12 @@ reasonable value, as float otherwise"
 
 ;; (mapc 'lbkmk-handle-bookmark lbkmk-json-object)
 
-
 (cl-defstruct lbkmk-moz-place uri type lastModified dateAdded parent id title index)
-
-;;(make-lbkmk-moz-place) ==> [cl-struct-lbkmk-moz-place nil nil nil nil nil nil nil nil]
-;;(make-lbkmk-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
-;;                   :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
-;;                   :index 9) ==> [cl-struct-lbkmk-moz-place "http://www.example.com" "text"
-;;                   1.340392082e+15 1.340391622e+15 3860 4153 "NINA - Devbox" 9]
 
 (setq lbkmk-test-bookmark
      (make-lbkmk-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
                         :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
                         :index 9))
-;; (setq lbkmk-test-bookmark2 (copy-lbkmk-moz-place lbkmk-test-bookmark))
-;; (lbkmk-moz-place-p lbkmk-test-bookmark2) ==> t
-;;(equal lbkmk-test-bookmark lbkmk-test-bookmark2) ==> t
-;;(eq lbkmk-test-bookmark lbkmk-test-bookmark2) ==> nil
-;;(lbkmk-moz-place-title lbkmk-test-bookmark) ==> "NINA - Devbox"
-;;(lbkmk-moz-place-type lbkmk-test-bookmark) ==> "text"
 
 (defun lbkmk-make-lbkmk-moz-place-list (list-of-lists)
   (let (url lastModified dateAdded parent id title index)
