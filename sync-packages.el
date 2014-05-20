@@ -27,39 +27,44 @@
     web-mode               ;; major mode for editing html templates
     yasnippet              ;; Yet another snippet extension for Emacs.
 
-    ;;; dependencies of starter-kit
     ;; note that to *properly* detect packages installed but not
-    ;; included in sync-packages-list, we'll need to store these or
-    ;; use code to locate dependencies of packages
+    ;; included in sync-packages-list, we'll need to store
+    ;; dependencies or use code to determine them.
+
+    ;; listing dependencies protects against uninstall of dependent
+    ;; package (which the package system should detect and warn about,
+    ;; but.. baby steps)
+
+    ;;; dependencies of starter-kit
     
-    ;; find-file-in-project Find files in a project quickly.
-    ;; git-commit-mode       Major mode for editing git commit messages
-    ;; git-rebase-mode       Major mode for editing git rebase files
-    ;; idle-highlight-mode   highlight the word the point is on
-    ;; ido-ubiquitous        Use ido (nearly) everywhere.
-    ;; magit                 control Git from Emacs
-    ;; paredit               minor mode for editing parentheses
-    ;; smex                  M-x interface with Ido-style fuzzy matching.
+    find-file-in-project  ;;Find files in a project quickly.
+    git-commit-mode       ;;Major mode for editing git commit messages
+    git-rebase-mode       ;;Major mode for editing git rebase files
+    idle-highlight-mode   ;;highlight the word the point is on
+    ido-ubiquitous        ;;Use ido (nearly) everywhere.
+    magit                 ;;control Git from Emacs
+    paredit               ;;minor mode for editing parentheses
+    smex                  ;;M-x interface with Ido-style fuzzy matching.
 
     ;;; dependencies of flycheck
     
-    ;; dash               A modern list library for Emacs
-    ;; epl           Emacs Package Library
-    ;; f                  Modern API for working with files and directories
-    ;; pkg-info           Information about packages
-    ;; s                  The long lost Emacs string manipulation library.
+    dash                  ;;A modern list library for Emacs
+    epl                   ;;Emacs Package Library
+    f                     ;;Modern API for working with files and directories
+    pkg-info              ;;Information about packages
+    s                     ;;The long lost Emacs string manipulation library.
 
     ;;; dependencies of starter-kit-lisp
     
-    ;; elisp-slime-nav   Make M-. and M-, work in elisp like they do in slime
+    elisp-slime-nav       ;;Make M-. and M-, work in elisp like they do in slime
 
     ;;; dependency of starter-kit-ruby
 
-    ;; inf-ruby               ;;Run a Ruby process in a buffer
+    inf-ruby               ;;Run a Ruby process in a buffer
 
     ;;; dependency of json-mode
 
-    ;; json-reformat          ;;Reformatting tool for JSON
+    json-reformat          ;;Reformatting tool for JSON
 
     ;;; other packages of interest but not automatically installed
     
@@ -161,6 +166,7 @@ package is not built-in and not in sync-packages-list"
   )
 
 (defun install-missing-packages ()
+  "Install each package in sync-packages-list which is not installed."
   (when
       (has-package-not-installed)
     ;; Check for new packages (package versions)
@@ -176,15 +182,7 @@ package is not built-in and not in sync-packages-list"
             (package-installed-p p))
            (package-install p))
        )
-     sync-packages-list)
-    ))
-
-;;; This almost tests append-if-installed
-;; (setq a '())
-;; (setq all-packages `())
-;; (package--mapc (lambda (pkg-desc) (setq all-packages (append (list (package-desc-name pkg-desc)) all-packages))))
-;; (setq first-package (car all-packages))
-;; (append-if-installed first-package a)
+     sync-packages-list)))
 
 ;;; OK, this will get a list of all the package names known to system
 ;; (let ((packages-found '()))
