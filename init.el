@@ -22,55 +22,41 @@
 
 ;;; Commentary:
 
-;;; Code:
+;; Any emacs setup which I want to occur on startup for every emacs
+;;install I use goes here.
 
-;;(filesets-init)
+;;; Code:
 
 (defun add-hooks-for-packages ()
   "Set up hooks which depend on packages that may not be synched on startup"
-  (add-hook 'sh-mode-hook '(auto-fill-mode -1))
-  ;;because I find it annoying for shell scripts
-  
-  ;; (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
               ;; Use spaces, not tabs.
-              (setq indent-tabs-mode nil)
-              ;; Recompile if .elc exists.
-              (add-hook (make-local-variable 'after-save-hook)
-                        (lambda ()
-                          (byte-force-recompile default-directory)))
-              (define-key emacs-lisp-mode-map
-                "\r" 'reindent-then-newline-and-indent)
-              (rainbow-delimiters-mode)))
-  
+              (setq indent-tabs-mode nil)))
+  (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'python-mode-hook 'flycheck-mode)
-  ;; (add-hook 'python-mode-hook 'auto-complete-mode)
+  (add-hook 'python-mode-hook 'auto-complete-mode)
   )
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
-;;We need do-sync-packages to run *before* add-hooks-for-packages
-;;so we have to add it to hook *after*
-(when (boundp 'emacs-sync-directory)
-  (defun do-sync-packages() (load-file (concat emacs-sync-directory "sync_packages.el")))
-  (eval-after-load 'package '(do-sync-packages))
-)
+(require 'sync-packages)
+(eval-after-load 'package '(install-missing-packages))
+;;(eval-after-load 'package '(add-hooks-for-packages))??
 
-;(eval-after-load "dash" 'dash-enable-font-lock)
 (require 'eldoc) 
 (eldoc-add-command
  'paredit-backward-delete
  'paredit-close-round)
 
 ;;don't call server-start if server is already running
-;;test pulled from server.el
+;;test copied from server.el
 (require 'server)
 (let ((file (expand-file-name "server"
 				(if server-use-tcp
 				    server-auth-dir
 				  server-socket-dir))))
   (if (not (file-exists-p file)) (server-start)))
-
 
 ;;; init.el ends here
