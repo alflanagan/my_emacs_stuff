@@ -28,6 +28,9 @@
     yasnippet              ;; Yet another snippet extension for Emacs.
 
     ;;; dependencies of starter-kit
+    ;; note that to *properly* detect packages installed but not
+    ;; included in sync-packages-list, we'll need to store these or
+    ;; use code to locate dependencies of packages
     
     ;; find-file-in-project Find files in a project quickly.
     ;; git-commit-mode       Major mode for editing git commit messages
@@ -98,28 +101,25 @@ last element"
     (mapcar 'package-installed-p sync-packages-list)))
   )
 
-(when
-    (has-package-not-installed)
-  ;; Check for new packages (package versions)
-  (message "%s" "Get latest versions of all packages...")
-  (package-refresh-contents)
-  (message "%s" " done.")
-  ;; Install the missing packages
-  (mapc
-   (lambda
-     (p)
-     (if
-         (not
-          (package-installed-p p))
-         (package-install p))
-     )
-   sync-packages-list)
-  )
+(defun get-dependent-packages (package-name)
+  "Returns list of packages which are automatically installed if package package-name is installed."
+  (popup-tip "I don't know how to implement this yet."))
 
 (defun packages-not-in-sync-list ()
   "Incomplete function to create a list of package names whose
 package is not built-in and not in sync-packages-list"
   (message "%s" "Not implemented yet"))
+
+
+(defun quick-popup (message)
+  (let ((popup (popup-create (point) 10 10))
+        )
+    (popup-set-list popup '(message))
+    (popup-draw popup)
+    (sleep-for 5)
+    (popup-delete popup)))
+
+;;(quick-popup "this is a test")  ;; doesn't work
 
 (defun do-with-installed-package (package something)
   "calls function something if package is not a built-in package"
@@ -127,27 +127,24 @@ package is not built-in and not in sync-packages-list"
       (funcall something package)))
 
 ;;print names of all installed packages which are not built-in
-(package--mapc
- (lambda
-   (x)
-   (if
-       (and
-        (package-installed-p x)
-        (not
-         (package-built-in-p x)))
-       (let
-           ((package-name
-             (package-desc-name x)))
-         (if
-             (not
-              (memq package-name sync-packages-list))
-             (progn
-               (princ package-name)
-               (princ "   ")))
-         )
-     )
-   )
- )
+(defun print-installed-packages ()
+  (package--mapc
+   (lambda
+     (x)
+     (if
+         (and
+          (package-installed-p x)
+          (not
+           (package-built-in-p x)))
+         (let
+             ((package-name
+               (package-desc-name x)))
+           (if
+               (not
+                (memq package-name sync-packages-list))
+               (progn
+                 (princ package-name)
+                 (princ "   "))))))))
 
 (defun append-if-installed
     (pkg-desc pkg-list)
@@ -163,6 +160,24 @@ package is not built-in and not in sync-packages-list"
     )
   )
 
+(defun install-missing-packages ()
+  (when
+      (has-package-not-installed)
+    ;; Check for new packages (package versions)
+    (message "%s" "Get latest versions of all packages...")
+    (package-refresh-contents)
+    (message "%s" " done.")
+    ;; Install the missing packages
+    (mapc
+     (lambda
+       (p)
+       (if
+           (not
+            (package-installed-p p))
+           (package-install p))
+       )
+     sync-packages-list)
+    ))
 
 ;;; This almost tests append-if-installed
 ;; (setq a '())
