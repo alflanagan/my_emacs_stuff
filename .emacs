@@ -1,9 +1,8 @@
 ;; .emacs
-(load-file "~/.emacs-site.el")
 
-(when (boundp 'emacs-sync-directory)
-  (load-file (concat emacs-sync-directory "init.el"))
-  )
+;; TODO: customizations that should be synchronized across emacs
+;; installs should be done outside customize; customize works best for
+;; local settings only.
 
 ;;(server-start)
 (custom-set-variables
@@ -11,16 +10,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(global-semantic-decoration-mode t)
- '(global-semantic-highlight-edits-mode t)
- '(global-semantic-highlight-func-mode t)
- '(global-semantic-idle-breadcrumbs-mode t nil (semantic/idle))
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
- '(paradox-github-token t)
- '(semantic-mode t))
+ '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -28,3 +22,8 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'scroll-left 'disabled nil)
+
+;; must be after custom-set-variables as melpa archive is required
+(add-to-list 'load-path "~/Devel/emacs/")
+(load-file "init.el")
+
