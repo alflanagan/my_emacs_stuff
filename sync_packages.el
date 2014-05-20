@@ -50,34 +50,32 @@
     
     ;; elisp-slime-nav   Make M-. and M-, work in elisp like they do in slime
 
-    ;;; other packages not currently installed
+    ;;; dependency of starter-kit-ruby
+
+    ;; inf-ruby               ;;Run a Ruby process in a buffer
+
+    ;;; dependency of json-mode
+
+    ;; json-reformat          ;;Reformatting tool for JSON
+
+    ;;; other packages of interest but not automatically installed
     
     ;; bash-completion        ;;BASH completion for the shell buffer
     ;; cython-mode            ;;Major mode for editing Cython files
+    ;; dash-functional        ;;Collection of useful combinators for Emacs Lisp
     ;; discover               ;;discover more of Emacs
     ;; ecb                    ;;a code browser for Emacs
+    ;; el-get                 ;;Manage the external elisp bits and pieces you depend upon
     ;; elpy                   ;;Emacs Python Development Environment
     ;; fuzzy                  ;;dependency of elpy
     ;; goto-chg               ;;goto last change
     ;; icicles                ;;Minibuffer input completion and cycling.
     ;; jedi                   ;;Python auto-completion for Emacs
+    ;; know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
     ;; pep8                   ;;run the python pep8 checker putting hits in a grep buffer
     ;; python-environment     ;;virtualenv API for Emacs Lisp
     ;; rainbow-mode           ;;Colorize color names in buffers
-    ;; dash-functional        ;;Collection of useful combinators for Emacs Lisp
-    ;; el-get                 ;;Manage the external elisp bits and pieces you depend upon
-    ;; know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
-
-    ;;; Packages of indeterminate status
-    ;; inf-ruby         h 20140428… unsigned           43 Run a Ruby process in a buffer
-    ;; json-mode        h 20140316… unsigned           47 Major mode for editing JSON files
-    ;; json-reformat    h 20140320… unsigned           25 Reformatting tool for JSON
-    ;; json-snatcher    h 20131110… unsigned            2 Grabs the path to JSON values in a JSON file
-    ;; paradox          h 20140515… unsigned           43 A modern Packages Menu. Colored, with package ratings, and customizable.
-    ;; popup            h 20140207… unsigned          134 Visual Popup User Interface
-    ;; rainbow-delimiters 20140329… unsigned           85 Highlight nested parens, brackets, braces a different color at each depth.
-    ;; sphinx-doc       h 20140428… unsigned            9 Sphinx friendly docstrings for Python functions
-    ;; tabulated-list   h 20120406… unsigned            9 generic major mode for tabulated lists.
+    ;; sphinx-doc             ;;Sphinx friendly docstrings for Python functions
 
 )
   "List of packages to verify at launch, and install if not present.")
