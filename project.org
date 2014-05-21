@@ -1,0 +1,42 @@
+* TODO Learn to use org mode
+
+* TODO Start organizing project using org notes
+
+* GOALS
+
+I've used a service called XMarks (http://www.xmarks.com) to
+maintain lists of URLs of particular interest (known as bookmarks
+or favorites). Even after firefox et al. add bookmarks synch,
+xmarks is nice in that it allows synchronization of bookmarks
+between different browsers. Unfortunately, xmarks has become
+unreliable, (apparently) unable to handle the constantly-changing
+browser bookmark functionality. I end up with duplicated bookmarks,
+entire duplicate trees, bookmark folders with nothing in them, etc.
+
+So I want to take charge of my own bookmark management.
+
+** Import bookmarks from all major browsers
+*** Use browser export functionality, parse files.
+*** Later: pull bookmarks directly from however the browser stores them
+** Provide bookmark management functionality
+*** UI interface to add, delete, move bookmarks in folders
+*** detect duplicate bookmarks
+*** Test bookmarks to determine if target reachable
+*** Maintain notes about sites, etc. beyond browser bookmark functionality
+** Export bookmarks to all major browsers
+** Store data in cloud
+*** Using user-configured service
+*** Some standard storage location?
+*** Provide web services and server?
+
+* FILES
+
+Major project files.
+
+- [[file:lib-bookmark.el][lib-bookmark.el]] :: functions to read Firefox JSON export format.
+- [[file:lbkmk-ert-tests.el][lbkmk-ert-tests.el]] :: unit tests for functions in lib-bookmark.el.
+- [[*Learn%20to%20use%20org%20mode][project.org]] :: top-level organizational notes. This file.
+- [[file:gpl.html][gpl.html]], [[file:gpl.txt][gpl.txt]] :: The open-source licenses for this project's content.
+  Note: if you wish to use any part of contents under terms incompatible
+  with the GPL, you *must* contact the author for license terms, fees,
+  etc.
