@@ -143,12 +143,6 @@ reasonable value, as float otherwise"
 
 (cl-defstruct lbkmk-moz-place uri type lastModified dateAdded parent id title index)
 
-(defvar lbkmk-test-bookmark
-     (make-lbkmk-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
-                        :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
-                        :index 9))
-
-
 (defun lbkmk-make-lbkmk-moz-place-list (list-of-lists)
   (let (url lastModified dateAdded parent id title index)
     (mapc (lambda (bkmk-assoc) (pcase (car bkmk-assoc)
