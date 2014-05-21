@@ -24,6 +24,7 @@
     starter-kit-js         ;; Saner defaults and goodies for Javascript
     starter-kit-lisp       ;; Saner defaults and goodies for lisp languages
     starter-kit-ruby       ;; Saner defaults and goodies for Ruby
+    undo-tree              ;; Treat undo history as a tree
     web-mode               ;; major mode for editing html templates
     yasnippet              ;; Yet another snippet extension for Emacs.
 
