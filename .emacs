@@ -25,5 +25,4 @@
 
 ;; must be after custom-set-variables as melpa archive is required
 (add-to-list 'load-path "~/Devel/emacs/")
-(load-file "init.el")
-
+(load-file (locate-file "init.el" load-path))
