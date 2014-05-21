@@ -27,57 +27,63 @@
     web-mode               ;; major mode for editing html templates
     yasnippet              ;; Yet another snippet extension for Emacs.
 
+    ;; note that to *properly* detect packages installed but not
+    ;; included in sync-packages-list, we'll need to store
+    ;; dependencies or use code to determine them.
+
+    ;; listing dependencies protects against uninstall of dependent
+    ;; package (which the package system should detect and warn about,
+    ;; but.. baby steps)
+
     ;;; dependencies of starter-kit
     
-    ;; find-file-in-project Find files in a project quickly.
-    ;; git-commit-mode       Major mode for editing git commit messages
-    ;; git-rebase-mode       Major mode for editing git rebase files
-    ;; idle-highlight-mode   highlight the word the point is on
-    ;; ido-ubiquitous        Use ido (nearly) everywhere.
-    ;; magit                 control Git from Emacs
-    ;; paredit               minor mode for editing parentheses
-    ;; smex                  M-x interface with Ido-style fuzzy matching.
+    find-file-in-project  ;;Find files in a project quickly.
+    git-commit-mode       ;;Major mode for editing git commit messages
+    git-rebase-mode       ;;Major mode for editing git rebase files
+    idle-highlight-mode   ;;highlight the word the point is on
+    ido-ubiquitous        ;;Use ido (nearly) everywhere.
+    magit                 ;;control Git from Emacs
+    paredit               ;;minor mode for editing parentheses
+    smex                  ;;M-x interface with Ido-style fuzzy matching.
 
     ;;; dependencies of flycheck
     
-    ;; dash               A modern list library for Emacs
-    ;; epl           Emacs Package Library
-    ;; f                  Modern API for working with files and directories
-    ;; pkg-info           Information about packages
-    ;; s                  The long lost Emacs string manipulation library.
+    dash                  ;;A modern list library for Emacs
+    epl                   ;;Emacs Package Library
+    f                     ;;Modern API for working with files and directories
+    pkg-info              ;;Information about packages
+    s                     ;;The long lost Emacs string manipulation library.
 
     ;;; dependencies of starter-kit-lisp
     
-    ;; elisp-slime-nav   Make M-. and M-, work in elisp like they do in slime
+    elisp-slime-nav       ;;Make M-. and M-, work in elisp like they do in slime
 
-    ;;; other packages not currently installed
+    ;;; dependency of starter-kit-ruby
+
+    inf-ruby               ;;Run a Ruby process in a buffer
+
+    ;;; dependency of json-mode
+
+    json-reformat          ;;Reformatting tool for JSON
+
+    ;;; other packages of interest but not automatically installed
     
     ;; bash-completion        ;;BASH completion for the shell buffer
     ;; cython-mode            ;;Major mode for editing Cython files
+    ;; dash-functional        ;;Collection of useful combinators for Emacs Lisp
     ;; discover               ;;discover more of Emacs
     ;; ecb                    ;;a code browser for Emacs
+    ;; el-get                 ;;Manage the external elisp bits and pieces you depend upon
     ;; elpy                   ;;Emacs Python Development Environment
     ;; fuzzy                  ;;dependency of elpy
     ;; goto-chg               ;;goto last change
     ;; icicles                ;;Minibuffer input completion and cycling.
     ;; jedi                   ;;Python auto-completion for Emacs
+    ;; know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
     ;; pep8                   ;;run the python pep8 checker putting hits in a grep buffer
     ;; python-environment     ;;virtualenv API for Emacs Lisp
     ;; rainbow-mode           ;;Colorize color names in buffers
-    ;; dash-functional        ;;Collection of useful combinators for Emacs Lisp
-    ;; el-get                 ;;Manage the external elisp bits and pieces you depend upon
-    ;; know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
-
-    ;;; Packages of indeterminate status
-    ;; inf-ruby         h 20140428… unsigned           43 Run a Ruby process in a buffer
-    ;; json-mode        h 20140316… unsigned           47 Major mode for editing JSON files
-    ;; json-reformat    h 20140320… unsigned           25 Reformatting tool for JSON
-    ;; json-snatcher    h 20131110… unsigned            2 Grabs the path to JSON values in a JSON file
-    ;; paradox          h 20140515… unsigned           43 A modern Packages Menu. Colored, with package ratings, and customizable.
-    ;; popup            h 20140207… unsigned          134 Visual Popup User Interface
-    ;; rainbow-delimiters 20140329… unsigned           85 Highlight nested parens, brackets, braces a different color at each depth.
-    ;; sphinx-doc       h 20140428… unsigned            9 Sphinx friendly docstrings for Python functions
-    ;; tabulated-list   h 20120406… unsigned            9 generic major mode for tabulated lists.
+    ;; sphinx-doc             ;;Sphinx friendly docstrings for Python functions
 
 )
   "List of packages to verify at launch, and install if not present.")
@@ -100,28 +106,25 @@ last element"
     (mapcar 'package-installed-p sync-packages-list)))
   )
 
-(when
-    (has-package-not-installed)
-  ;; Check for new packages (package versions)
-  (message "%s" "Get latest versions of all packages...")
-  (package-refresh-contents)
-  (message "%s" " done.")
-  ;; Install the missing packages
-  (mapc
-   (lambda
-     (p)
-     (if
-         (not
-          (package-installed-p p))
-         (package-install p))
-     )
-   sync-packages-list)
-  )
+(defun get-dependent-packages (package-name)
+  "Returns list of packages which are automatically installed if package package-name is installed."
+  (popup-tip "I don't know how to implement this yet."))
 
 (defun packages-not-in-sync-list ()
   "Incomplete function to create a list of package names whose
 package is not built-in and not in sync-packages-list"
   (message "%s" "Not implemented yet"))
+
+
+(defun quick-popup (message)
+  (let ((popup (popup-create (point) 10 10))
+        )
+    (popup-set-list popup '(message))
+    (popup-draw popup)
+    (sleep-for 5)
+    (popup-delete popup)))
+
+;;(quick-popup "this is a test")  ;; doesn't work
 
 (defun do-with-installed-package (package something)
   "calls function something if package is not a built-in package"
@@ -129,27 +132,24 @@ package is not built-in and not in sync-packages-list"
       (funcall something package)))
 
 ;;print names of all installed packages which are not built-in
-(package--mapc
- (lambda
-   (x)
-   (if
-       (and
-        (package-installed-p x)
-        (not
-         (package-built-in-p x)))
-       (let
-           ((package-name
-             (package-desc-name x)))
-         (if
-             (not
-              (memq package-name sync-packages-list))
-             (progn
-               (princ package-name)
-               (princ "   ")))
-         )
-     )
-   )
- )
+(defun print-installed-packages ()
+  (package--mapc
+   (lambda
+     (x)
+     (if
+         (and
+          (package-installed-p x)
+          (not
+           (package-built-in-p x)))
+         (let
+             ((package-name
+               (package-desc-name x)))
+           (if
+               (not
+                (memq package-name sync-packages-list))
+               (progn
+                 (princ package-name)
+                 (princ "   "))))))))
 
 (defun append-if-installed
     (pkg-desc pkg-list)
@@ -165,13 +165,24 @@ package is not built-in and not in sync-packages-list"
     )
   )
 
-
-;;; This almost tests append-if-installed
-;; (setq a '())
-;; (setq all-packages `())
-;; (package--mapc (lambda (pkg-desc) (setq all-packages (append (list (package-desc-name pkg-desc)) all-packages))))
-;; (setq first-package (car all-packages))
-;; (append-if-installed first-package a)
+(defun install-missing-packages ()
+  "Install each package in sync-packages-list which is not installed."
+  (when
+      (has-package-not-installed)
+    ;; Check for new packages (package versions)
+    (message "%s" "Get latest versions of all packages...")
+    (package-refresh-contents)
+    (message "%s" " done.")
+    ;; Install the missing packages
+    (mapc
+     (lambda
+       (p)
+       (if
+           (not
+            (package-installed-p p))
+           (package-install p))
+       )
+     sync-packages-list)))
 
 ;;; OK, this will get a list of all the package names known to system
 ;; (let ((packages-found '()))
