@@ -40,7 +40,9 @@
 (defconst lbkmk-test-bookmarks-file "bookmarks-2014-04-25.json"
   "A Firefox JSON export file for testing purposes")
 
-(setq lbkmk-json-object (json-read-file lbkmk-test-bookmarks-file))
+(defvar lbkmk-json-object
+  (json-read-file lbkmk-test-bookmarks-file)
+  "JSON object from Firefox export file.")
 
 (defun lbkmk-get-output-buffer ()
   "Returns the bookmark output buffer, if it exists."
@@ -141,10 +143,11 @@ reasonable value, as float otherwise"
 
 (cl-defstruct lbkmk-moz-place uri type lastModified dateAdded parent id title index)
 
-(setq lbkmk-test-bookmark
+(defvar lbkmk-test-bookmark
      (make-lbkmk-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
                         :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
                         :index 9))
+
 
 (defun lbkmk-make-lbkmk-moz-place-list (list-of-lists)
   (let (url lastModified dateAdded parent id title index)
@@ -156,8 +159,8 @@ reasonable value, as float otherwise"
                             (`parent (setq parent (cdr bkmk-assoc)))
                             (`id (setq id (cdr bkmk-assoc)))
                             (`dateAdded (setq dateAdded (cdr bkmk-assoc)))
-                            (`lastModified (setq lastKModified (cdr bkmk-assoc)))
-                            (_ (error "lbkmk-make-lbkmk-moz-place-list got alist with car of %s" (car bkmk-assoc)))
+                            (`lastModified (setq lastModified (cdr bkmk-assoc)))
+                            (`_ (error "lbkmk-make-lbkmk-moz-place-list got alist with car of %s" (car bkmk-assoc)))
                             )) list-of-lists)))
 
 (assert (listp lbkmk-json-object))
