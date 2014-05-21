@@ -25,11 +25,8 @@
 
 ;;; Commentary:
 
-;; 
-;; 
-
-;; 
-
+;; These functions are geared to reading a list of web sit bookmarks
+;; from a JSON file produced using Firefox's bookmarks export feature.
 
 ;;; History:
 
