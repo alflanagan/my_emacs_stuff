@@ -1,7 +1,9 @@
 ;; -*- lexical-binding: t -*-
 ;;; Unit tests for functions in the namespace lbkmk-
 
-(load-file "lib-bookmark.el")
+(require 'ert)
+
+(load-file (locate-file "lib-bookmark.el" load-path))
 
 (defun output-buffer-has-text (expected-text)
   (with-current-buffer (lbkmk-get-output-buffer)
@@ -60,7 +62,7 @@
   (should (equal (make-lbkmk-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
                                        :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
                                        :index 9)
-                 [cl-struct-lbkmk-moz-place "http://www.example.com" "text" 1.340392082e+15 1.340391622e+15 3860
+                 [cl-struct-lbkmk-moz-place "http://www.example.com" "text" 1340392082000000 1340391622000000 3860
                                             4153 "NINA - Devbox" 9]))
   )
 
