@@ -13,6 +13,7 @@
     ;;;Packages to auto-install
     auto-complete          ;; Auto Completion for GNU Emacs
     flycheck               ;; On-the-fly syntax checking (Flymake done right)
+    ;;helm                   ;; Helm is an Emacs incremental and narrowing framework
     json-mode              ;; Major mode for editing JSON files
     markdown-mode          ;; Emacs Major mode for Markdown-formatted text files
     paradox                ;; Display Package Ratings on the *Packages* buffer.
@@ -24,6 +25,7 @@
     starter-kit-js         ;; Saner defaults and goodies for Javascript
     starter-kit-lisp       ;; Saner defaults and goodies for lisp languages
     starter-kit-ruby       ;; Saner defaults and goodies for Ruby
+    undo-tree              ;; Treat undo history as a tree
     web-mode               ;; major mode for editing html templates
     yasnippet              ;; Yet another snippet extension for Emacs.
 
