@@ -53,7 +53,7 @@
   (get-buffer-create "*web_bookmarks*"))
 
 (defun lbkmk-clear-output-buffer () 
-  ;;clean up previous output, if any
+  "Remove all previous output, if any"
   (with-current-buffer (lbkmk-get-create-output-buffer)
     (delete-region (point-min) (point-max))))
 
@@ -162,3 +162,55 @@ reasonable value, as float otherwise"
 (assert (listp (cddr lbkmk-json-object)))
 (lbkmk-output (type-of lbkmk-json-object) (cddr lbkmk-json-object))
 ;; (lbkmk-make-lbkmk-moz-place-list (aref lbkmk-json-object 1))
+
+;;JSON:
+;; {
+;; "uri": "https:\/\/www.google.com\/webfonts",
+;; "type": "text\/x-moz-place",
+;; "dateAdded": 1362163315000000,
+;; "parent": 3881,
+;; "id": 4190,
+;; "title": "Google Web Fonts",
+;; "index": 1
+;; },
+
+;;parsed:
+;; ((index . 1)
+;;  (title . "Google Web Fonts")
+;;  (id . 4190)
+;;  (parent . 3881)
+;;  (dateAdded . 1.362163315e+15)
+;;  (type . "text/x-moz-place")
+;;  (uri . "https://www.google.com/webfonts"))
+
+(defun lbkmk-alist-value (key alist)
+  "Given a key to an alist, returns associated value."
+  ;; should be a standard function somewhere...
+  (cdr (assq key alist)))
+
+(defun lbkmk-make-moz-place-from-json (json-node)
+  "Given a parsed JSON representation of a web bookmark, returns a lbkmk-moz-place structure."
+  (make-lbkmk-moz-place :uri  (lbkmk-alist-value 'uri json-node)
+                        :type  (lbkmk-alist-value 'type json-node)
+                        :lastModified  (lbkmk-alist-value  'lastModified json-node)
+                        :dateAdded (lbkmk-alist-value 'dateAdded json-node)
+                        :parent (lbkmk-alist-value 'parent json-node)
+                        :id (lbkmk-alist-value 'id json-node)
+                        :title (lbkmk-alist-value 'title json-node)
+                        :index (lbkmk-alist-value 'index json-node)))
+
+(defun lbkmk-get-sample-json-parse ()
+  (with-temp-buffer
+    (insert "{
+\"uri\": \"https://www.google.com/webfonts\",
+\"type\": \"text/x-moz-place\",
+\"dateAdded\": 1362163315000000,
+\"parent\": 3881,
+\"id\": 4190,
+\"title\": \"Google Web Fonts\",
+\"index\": 1
+},")
+    (goto-char    (point-min))
+    (json-read-object)))
+
+(lbkmk-make-moz-place-from-json (lbkmk-get-sample-json-parse))
