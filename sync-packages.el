@@ -13,7 +13,7 @@
     ;;;Packages to auto-install
     auto-complete          ;; Auto Completion for GNU Emacs
     flycheck               ;; On-the-fly syntax checking (Flymake done right)
-    ;;helm                   ;; Helm is an Emacs incremental and narrowing framework
+    ipretty                ;; Interactive Emacs Lisp pretty-printing
     json-mode              ;; Major mode for editing JSON files
     markdown-mode          ;; Emacs Major mode for Markdown-formatted text files
     paradox                ;; Display Package Ratings on the *Packages* buffer.
@@ -79,6 +79,7 @@
     ;; elpy                   ;;Emacs Python Development Environment
     ;; fuzzy                  ;;dependency of elpy
     ;; goto-chg               ;;goto last change
+    ;; helm                   ;; Helm is an Emacs incremental and narrowing framework
     ;; icicles                ;;Minibuffer input completion and cycling.
     ;; jedi                   ;;Python auto-completion for Emacs
     ;; know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
