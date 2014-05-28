@@ -44,6 +44,8 @@
   (json-read-file lbkmk-test-bookmarks-file)
   "JSON object from Firefox export file.")
 
+;; (prin1 lbkmk-json-object (get-buffer-create "*parsed-json*"))
+
 (defun lbkmk-get-output-buffer ()
   "Returns the bookmark output buffer, if it exists."
   (get-buffer "*web_bookmarks*"))
