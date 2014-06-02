@@ -236,3 +236,7 @@ reasonable value, as float otherwise"
 
 ;; (with-current-buffer (get-buffer-create "*parsed-json*")
 ;;   (insert (pp-to-string lbkmk-json-object)))
+;;; # Goals #
+;;; Parse json structure
+;;; create buffer showing bookmarks
+;;; save bookmarks in multiple formats
