@@ -27,17 +27,18 @@
 
 ;;; Code:
 
-(defun add-hooks-for-packages ()
+(defun add-hooks-for-packages
+    ()
   "Set up hooks which depend on packages that may not be synched on startup"
   (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
+            (lambda
+              ()
               ;; Use spaces, not tabs.
               (setq indent-tabs-mode nil)))
   (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'python-mode-hook 'flycheck-mode)
-  (add-hook 'python-mode-hook 'auto-complete-mode)
-  )
+  (add-hook 'python-mode-hook 'auto-complete-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
@@ -53,10 +54,21 @@
 ;;don't call server-start if server is already running
 ;;test copied from server.el
 (require 'server)
-(let ((file (expand-file-name "server"
-				(if server-use-tcp
-				    server-auth-dir
-				  server-socket-dir))))
-  (if (not (file-exists-p file)) (server-start)))
+(let
+    ((file
+      (expand-file-name "server"
+                        (if server-use-tcp
+                            server-auth-dir
+                          server-socket-dir))))
+  (if
+      (not
+       (file-exists-p file))
+      (server-start)))
+
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (push '("<=" . ?≤) prettify-symbols-alist)
+            (push '(">=" . ?≥) prettify-symbols-alist)))
 
 ;;; init.el ends here
