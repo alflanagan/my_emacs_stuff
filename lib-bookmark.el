@@ -185,21 +185,16 @@ reasonable value, as float otherwise"
 ;;  (type . "text/x-moz-place")
 ;;  (uri . "https://www.google.com/webfonts"))
 
-(defun lbkmk-alist-value (key alist)
-  "Given a key to an alist, returns associated value."
-  ;; should be a standard function somewhere...
-  (cdr (assq key alist)))
-
 (defun lbkmk-make-moz-place-from-json (json-node)
   "Given a parsed JSON representation of a web bookmark, returns a lbkmk-moz-place structure."
-  (make-lbkmk-moz-place :uri  (lbkmk-alist-value 'uri json-node)
-                        :type  (lbkmk-alist-value 'type json-node)
-                        :lastModified  (lbkmk-alist-value  'lastModified json-node)
-                        :dateAdded (lbkmk-alist-value 'dateAdded json-node)
-                        :parent (lbkmk-alist-value 'parent json-node)
-                        :id (lbkmk-alist-value 'id json-node)
-                        :title (lbkmk-alist-value 'title json-node)
-                        :index (lbkmk-alist-value 'index json-node)))
+  (make-lbkmk-moz-place :uri  (assoc-default 'uri json-node)
+                        :type  (assoc-default 'type json-node)
+                        :lastModified  (lbkmk-convert-moz-time (assoc-default  'lastModified json-node))
+                        :dateAdded (lbkmk-convert-moz-time (assoc-default 'dateAdded json-node))
+                        :parent (assoc-default 'parent json-node)
+                        :id (assoc-default 'id json-node)
+                        :title (assoc-default 'title json-node)
+                        :index (assoc-default 'index json-node)))
 
 (defun lbkmk-get-sample-json-parse ()
   (with-temp-buffer
@@ -216,3 +211,28 @@ reasonable value, as float otherwise"
     (json-read-object)))
 
 (lbkmk-make-moz-place-from-json (lbkmk-get-sample-json-parse))
+
+;; ((title . "")
+;;  (id . 1)
+;;  (dateAdded . 1328812310196978)
+;;  (lastModified . 1359143022769056)
+;;  (type . "text/x-moz-place-container")
+;;  (root . "placesRoot")
+;;  (children .
+(cl-defstruct lbkmk-moz-root id dateAdded lastModified type root children)
+
+(defun lbkmk-make-moz-root-children-from-json (json-node)
+  "Currently a place-holder; process children of a moz-root node."
+  json-node)
+
+(defun lbkmk-make-moz-root-from-json (json-node)
+  "Given a parsed bookmark file, create the bookmark tree from root."
+  (make-lbkmk-moz-root :id (assoc-default 'id json-node)
+                       :type  (assoc-default 'type json-node)
+                       :lastModified  (assoc-default  'lastModified json-node)
+                       :dateAdded (assoc-default 'dateAdded json-node)
+                       :root (assoc-default 'root json-node)
+                       :children (lbmk-make-moz-root-children-from-json (assoc-default 'children json-node))))
+
+;; (with-current-buffer (get-buffer-create "*parsed-json*")
+;;   (insert (pp-to-string lbkmk-json-object)))
