@@ -27,6 +27,9 @@
 
 ;;; Code:
 
+;; token "paradox emacs packages"
+(setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
+
 (defun add-hooks-for-packages
     ()
   "Set up hooks which depend on packages that may not be synched on startup"
@@ -54,21 +57,21 @@
 ;;don't call server-start if server is already running
 ;;test copied from server.el
 (require 'server)
-(let
-    ((file
-      (expand-file-name "server"
-                        (if server-use-tcp
-                            server-auth-dir
-                          server-socket-dir))))
-  (if
-      (not
-       (file-exists-p file))
+(let ((file (expand-file-name "server"
+                              (if server-use-tcp
+                                  server-auth-dir
+                                server-socket-dir))))
+  (if (not (file-exists-p file))
       (server-start)))
-
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (push '("<=" . ?≤) prettify-symbols-alist)
             (push '(">=" . ?≥) prettify-symbols-alist)))
+
+(package-initialize)
+(elpy-enable)
+;;(elpy-use-ipython)
+(elpy-clean-modeline)
 
 ;;; init.el ends here
