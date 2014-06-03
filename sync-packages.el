@@ -7,11 +7,17 @@
 (require 'cl-lib)
 (package-initialize)
 
+;; '(package-archives
+;;   '(("gnu" . "http://elpa.gnu.org/packages/")
+;;     ("melpa" . "http://melpa.milkbox.net/packages/")
+;;     ("elpy" . "http://jorgenschaefer.github.io/packages/")))
+
 ;; Guarantee all packages are installed on start
 (defvar sync-packages-list
   '(
     ;;;Packages to auto-install
     auto-complete          ;; Auto Completion for GNU Emacs
+    elpy                   ;; Emacs Python Development Environment
     flycheck               ;; On-the-fly syntax checking (Flymake done right)
     ipretty                ;; Interactive Emacs Lisp pretty-printing
     json-mode              ;; Major mode for editing JSON files
@@ -68,21 +74,29 @@
 
     json-reformat          ;;Reformatting tool for JSON
 
+    ;;; dependencies of elpy
+    
+    ;; auto-complete
+    ;; find-file-in-project
+    ;; yasnippet
+    fuzzy                  ;;Fuzzy Matching
+    highlight-indentation  ;;Minor modes for highlighting indentation
+    idomenu                ;;imenu tag selection a la ido
+    iedit                  ;;Edit multiple regions in the same way simultaneously.
+    nose                   ;;Easy Python test running in Emacs
+    pyvenv                 ;;Python virtual environment interface
+
     ;;; other packages of interest but not automatically installed
     
     ;; bash-completion        ;;BASH completion for the shell buffer
     ;; cython-mode            ;;Major mode for editing Cython files
-    ;; dash-functional        ;;Collection of useful combinators for Emacs Lisp
     ;; discover               ;;discover more of Emacs
     ;; ecb                    ;;a code browser for Emacs
     ;; el-get                 ;;Manage the external elisp bits and pieces you depend upon
-    ;; elpy                   ;;Emacs Python Development Environment
-    ;; fuzzy                  ;;dependency of elpy
     ;; goto-chg               ;;goto last change
     ;; helm                   ;; Helm is an Emacs incremental and narrowing framework
     ;; icicles                ;;Minibuffer input completion and cycling.
     ;; jedi                   ;;Python auto-completion for Emacs
-    ;; know-your-http-well    ;;Look up the meaning of HTTP headers, methods, relations, status codes
     ;; pep8                   ;;run the python pep8 checker putting hits in a grep buffer
     ;; python-environment     ;;virtualenv API for Emacs Lisp
     ;; rainbow-mode           ;;Colorize color names in buffers
