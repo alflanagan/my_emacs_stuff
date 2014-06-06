@@ -176,7 +176,7 @@ package is not built-in and not in sync-packages-list"
     ;; Install the missing packages
     (mapc
      (lambda (p)
-       (unless (package-installed-p)
+       (unless (package-installed-p p)
          (package-install p)))
      sync-packages-list)))
 
