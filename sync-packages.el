@@ -89,6 +89,7 @@
     ;;; dependencies of paradox
 
     tabulated-list         ;;generic major mode for tabulated lists.
+
     ;;; other packages of interest but not automatically installed
     
     ;; bash-completion        ;;BASH completion for the shell buffer
@@ -100,6 +101,7 @@
     ;; helm                   ;; Helm is an Emacs incremental and narrowing framework
     ;; icicles                ;;Minibuffer input completion and cycling.
     ;; jedi                   ;;Python auto-completion for Emacs
+    ;; outline-magic          ;;outline mode extensions for Emacs
     ;; pep8                   ;;run the python pep8 checker putting hits in a grep buffer
     ;; python-environment     ;;virtualenv API for Emacs Lisp
     ;; rainbow-mode           ;;Colorize color names in buffers
