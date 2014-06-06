@@ -41,7 +41,9 @@
   (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'python-mode-hook 'flycheck-mode)
-  (add-hook 'python-mode-hook 'auto-complete-mode))
+  (add-hook 'python-mode-hook 'auto-complete-mode)
+  (add-hook 'python-mode-hook 'hs-minor-mode)
+  (add-hook 'python-mode-hook 'semantic-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
@@ -64,10 +66,14 @@
   (if (not (file-exists-p file))
       (server-start)))
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (push '("<=" . ?≤) prettify-symbols-alist)
-            (push '(">=" . ?≥) prettify-symbols-alist)))
+(defun setup-elisp-prettify ()
+  "Add to symbols auto-converted to unicode."
+  (if (boundp 'prettify-symbols-alist)
+      (progn
+        (push '("<=" . ?≤) prettify-symbols-alist)
+        (push '(">=" . ?≥) prettify-symbols-alist))))
+
+(add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
 
 (package-initialize)
 (elpy-enable)
