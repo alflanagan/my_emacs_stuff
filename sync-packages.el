@@ -1,6 +1,7 @@
 ;;; sync-packages.el --- Ensure a set list of packages are installed on emacs startup.
 ;; -*- fill-column: 120; -*-
 ;;; Commentary:
+;; package namespace prefix: syncpack-
 
 ;;; Code:
 (require 'package)
@@ -110,100 +111,73 @@
 )
   "List of packages to verify at launch, and install if not present.")
 
-(defun reduce-and (a_list)
+(defun syncpack-reduce-and (a_list)
   "Reduce a list using and -- i.e. return nil if any element is nil, else return
 last element"
   ;;only needed because you can't (apply 'and (...))
-  (if (null a_list)
-      t
-    (and (car a_list) (reduce-and (cdr a_list)))
-    )
-  )
+  (unless (null a_list)
+    (and (car a_list) (syncpack-reduce-and (cdr a_list)))))
 
-(defun has-package-not-installed
-    ()
+(defun syncpack-has-package-not-installed ()
   "Returns t if any package in sync-packages-list is not actually installed"
   (not
-   (reduce-and
-    (mapcar 'package-installed-p sync-packages-list)))
-  )
+   (syncpack-reduce-and
+    (mapcar 'package-installed-p sync-packages-list))))
 
-(defun get-dependent-packages (package-name)
+(defun syncpack-get-dependent-packages (package-name)
   "Returns list of packages which are automatically installed if package package-name is installed."
-  (popup-tip "I don't know how to implement this yet."))
+  (popup-tip "I don't know how to get dependencies from archive."))
 
-(defun packages-not-in-sync-list ()
+(defun syncpack-packages-not-in-sync-list ()
   "Incomplete function to create a list of package names whose
 package is not built-in and not in sync-packages-list"
   (message "%s" "Not implemented yet"))
 
-
-(defun quick-popup (message)
-  (let ((popup (popup-create (point) 10 10))
-        )
+(defun syncpack-quick-popup (message)
+  (let ((popup (popup-create (point) 10 10)))
     (popup-set-list popup '(message))
     (popup-draw popup)
     (sleep-for 5)
     (popup-delete popup)))
 
-;;(quick-popup "this is a test")  ;; doesn't work
+;;(syncpack-quick-popup "this is a test")  ;; doesn't work
 
-(defun do-with-installed-package (package something)
+(defun syncpack-do-with-installed-package (package something)
   "calls function something if package is not a built-in package"
   (if (not (package-built-in-p package))
       (funcall something package)))
 
 ;;print names of all installed packages which are not built-in
-(defun print-installed-packages ()
+(defun syncpack-print-installed-packages ()
   (package--mapc
-   (lambda
-     (x)
-     (if
-         (and
-          (package-installed-p x)
-          (not
-           (package-built-in-p x)))
-         (let
-             ((package-name
-               (package-desc-name x)))
-           (if
-               (not
-                (memq package-name sync-packages-list))
+   (lambda (x)
+     (if (and (package-installed-p x)
+              (not (package-built-in-p x)))
+         (let ((package-name (package-desc-name x)))
+           (if (not (memq package-name sync-packages-list))
                (progn
                  (princ package-name)
                  (princ "   "))))))))
 
-(defun append-if-installed
-    (pkg-desc pkg-list)
+(defun syncpack-append-if-installed (pkg-desc pkg-list)
   "If pkg-desc is an installed (but not built-in) package, append its name to pkg-list."
-  (if
-      (and
-       (package-installed-p pkg-desc)
-       (not
-        (package-built-in-p pkg-desc)))
-      (append
-       (pkg-desc-name pkg-desc)
-       pkg-list)
-    )
-  )
+  (if (and (package-installed-p pkg-desc)
+           (not (package-built-in-p pkg-desc)))
+      (append (pkg-desc-name pkg-desc) pkg-list)))
 
-(defun install-missing-packages ()
+(defun syncpack-install-missing-packages ()
   "Install each package in sync-packages-list which is not installed."
   (when
-      (has-package-not-installed)
+      (syncpack-has-package-not-installed)
     ;; Check for new packages (package versions)
     (message "%s" "Get latest versions of all packages...")
     (package-refresh-contents)
     (message "%s" " done.")
     ;; Install the missing packages
     (mapc
-     (lambda
-       (p)
-       (if
-           (not
-            (package-installed-p p))
-           (package-install p))
-       )
+     (lambda (p)
+       (unless (package-installed-p)
+         (package-install p)))
      sync-packages-list)))
 
 ;;; OK, this will get a list of all the package names known to system
