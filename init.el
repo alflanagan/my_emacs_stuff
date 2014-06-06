@@ -48,7 +48,7 @@
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
 (require 'sync-packages)
-(eval-after-load 'package '(install-missing-packages))
+(eval-after-load 'package '(syncpack-install-missing-packages))
 ;;(eval-after-load 'package '(add-hooks-for-packages))??
 
 (require 'eldoc) 
@@ -76,6 +76,7 @@
 (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
 
 (package-initialize)
+(require 'elpy)
 (elpy-enable)
 ;;(elpy-use-ipython)
 (elpy-clean-modeline)
