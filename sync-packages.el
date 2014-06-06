@@ -86,6 +86,9 @@
     nose                   ;;Easy Python test running in Emacs
     pyvenv                 ;;Python virtual environment interface
 
+    ;;; dependencies of paradox
+
+    tabulated-list         ;;generic major mode for tabulated lists.
     ;;; other packages of interest but not automatically installed
     
     ;; bash-completion        ;;BASH completion for the shell buffer
