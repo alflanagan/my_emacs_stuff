@@ -43,7 +43,9 @@
   (add-hook 'python-mode-hook 'flycheck-mode)
   (add-hook 'python-mode-hook 'auto-complete-mode)
   (add-hook 'python-mode-hook 'hs-minor-mode)
-  (add-hook 'python-mode-hook 'semantic-mode))
+  (add-hook 'python-mode-hook 'semantic-mode)
+  ;; because ido-ubiquitous doesn't get options right
+  (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
@@ -67,7 +69,7 @@
       (server-start)))
 
 (defun setup-elisp-prettify ()
-  "Add to symbols auto-converted to unicode."
+  "Add to words auto-converted to unicode symbols."
   (if (boundp 'prettify-symbols-alist)
       (progn
         (push '("<=" . ?≤) prettify-symbols-alist)
