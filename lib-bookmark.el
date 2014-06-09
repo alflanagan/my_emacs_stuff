@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t -*-
+;; -*- coding: utf-8; lexical-binding: t -*-
 ;;; lib-bookmark.el --- Browser bookmark file browsing & conversion
 ;; namespace prefix for this file: lbkmk-
 
@@ -63,7 +63,9 @@
 
 (defun lbkmk-convert-moz-time (time-value)
   "Convert mozilla time value to standard emacs (HIGH LOW USEC PSEC)"
-  (seconds-to-time (/ time-value 1000000.0)))
+  (if time-value
+      (seconds-to-time (/ time-value 1000000.0))
+    nil))
 
 (defun lbkmk-format-moz-time-iso-8601 (time-value)
   "Format time-value from mozilla JSON to ISO 8601 standard format, return as string"
