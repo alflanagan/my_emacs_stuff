@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t -*-
+;; -*- coding: utf-8; lexical-binding: t -*-
 ;;; Unit tests for functions in the namespace lbkmk-
 
 (require 'ert)
@@ -15,7 +15,9 @@
   "Tests functionality of lbkmk-convert-moz-time."
   (should (equal (lbkmk-convert-moz-time  100000000000001.0) '(1525 57600 0 998378)))
   (should (equal (lbkmk-convert-moz-time  100000000000001) '(1525 57600 0 998378)))
-  (should (equal (lbkmk-convert-moz-time  0.0) '(0 0 0 0))))
+  (should (equal (lbkmk-convert-moz-time  0.0) '(0 0 0 0)))
+  (should (equal (lbkmk-convert-moz-time nil) nil)))
+
 
 ;;; **** lbkmk-format-moz-time-iso-8601 ****
 (ert-deftest lbkmk-test-format-moz-time-iso-8601 ()
@@ -83,10 +85,12 @@
          (make-lbkmk-moz-place :uri "http://www.example.com" :type "text" :lastModified 1340392082000000
                                :dateAdded 1340391622000000 :parent 3860 :id 4153 :title "NINA - Devbox"
                                :index 9))
-        (lbkmk-test-bookmark2 (copy-lbkmk-moz-place lbkmk-test-bookmark)))
+        lbkmk-test-bookmark2)
+    (setq lbkmk-test-bookmark2 (copy-lbkmk-moz-place lbkmk-test-bookmark))
     (should (lbkmk-moz-place-p lbkmk-test-bookmark2))
     (should (equal lbkmk-test-bookmark lbkmk-test-bookmark2))
-    (should (not (eq lbkmk-test-bookmark lbkmk-test-bookmark2)))))
+    (should (not (eq lbkmk-test-bookmark lbkmk-test-bookmark2)))
+    ))
 
 ;; lbkmk-moz-place-fieldname
 (ert-deftest lbkmk-test-fields-moz-place ()
@@ -98,3 +102,4 @@
     (should (equal (lbkmk-moz-place-type lbkmk-test-bookmark) "text"))))
 
 
+(progn (ert t) nil)
