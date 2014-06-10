@@ -102,4 +102,48 @@
     (should (equal (lbkmk-moz-place-type lbkmk-test-bookmark) "text"))))
 
 
+(defun lbkmk-make-json-from-str (sample-json)
+  (with-temp-buffer
+    (insert sample-json)
+    (goto-char    (point-min))
+    (json-read-object)))
+
+
+(ert-deftest lbkmk-test-make-moz-place-from-json ()
+    (let ((sample-json 
+           (lbkmk-make-json-from-str "{
+\"uri\": \"https://www.google.com/webfonts\",
+\"type\": \"text/x-moz-place\",
+\"dateAdded\": 1362163315000000,
+\"parent\": 3881,
+\"id\": 4190,
+\"title\": \"Google Web Fonts\",
+\"index\": 1
+},")))
+      (should (equal (lbkmk-make-moz-place-from-json sample-json)
+                     (make-lbkmk-moz-place :uri "https://www.google.com/webfonts"
+                                           :type  "text/x-moz-place"
+                                           :lastModified  (lbkmk-convert-moz-time nil)
+                                           :dateAdded (lbkmk-convert-moz-time 1362163315000000)
+                                           :parent 3881
+                                           :id 4190
+                                           :title "Google Web Fonts"
+                                           :index 1)))))
+
+(ert-deftest  lbkmk-test-make-moz-root-from-json ()
+  (let ((sample-json (lbkmk-make-json-from-str
+                      "{\"children\": [],
+  \"root\": \"placesRoot\",
+  \"type\": \"text\\/x-moz-place-container\",
+  \"lastModified\": 1359143022769056,
+  \"dateAdded\": 1328812310196978,
+  \"id\": 1,
+  \"title\": \"\"
+}"
+                      )))
+    (should (equal (lbkmk-make-moz-root-from-json sample-json)
+                   (make-lbkmk-moz-root :id 1
+                                        :dateAdded (lbkmk-convert-moz-time 1328812310196978)
+                                        :lastModified (lbkmk-convert-moz-time 1359143022769056)
+                                        :type "text\\/x-moz-place-container")))))
 (progn (ert t) nil)
