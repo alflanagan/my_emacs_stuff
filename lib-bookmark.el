@@ -69,7 +69,9 @@
 
 (defun lbkmk-format-moz-time-iso-8601 (time-value)
   "Format time-value from mozilla JSON to ISO 8601 standard format, return as string"
-  (format-time-string "%FT%T%z"  (lbkmk-convert-moz-time time-value)))
+  (if time-value
+      (format-time-string "%FT%T%z"  (lbkmk-convert-moz-time time-value))
+    ""))
 
 (defun lbkmk-fuzzy-float-str (any-float)
   "Format a float as a date string if it would result in a
@@ -94,27 +96,22 @@ reasonable value, as float otherwise"
 
 (defun lbkmk-output-str (a-string)
   "Writes a single string or character to the output buffer."
-  (let ((outputbuffer (lbkmk-get-create-output-buffer)))
-    (with-current-buffer outputbuffer
-      (goto-char (point-max))
-      (insert a-string))))
+  (with-current-buffer (lbkmk-get-create-output-buffer)
+    (goto-char (point-max))
+    (insert a-string)))
 
 (defun lbkmk-output-strs (&rest output-strings)
-  "Write a list of strings to the output buffer *experiments*"
-  (let ((outputbuffer (lbkmk-get-create-output-buffer)))
-    (with-current-buffer outputbuffer
-      (goto-char (point-max))
-      (mapc 'insert output-strings))))
+  "Write a list of strings to the output buffer"
+  (with-current-buffer  (lbkmk-get-create-output-buffer)
+    (goto-char (point-max))
+    (mapc 'insert output-strings)))
 
 (defun lbkmk-output
     (&rest output-values)
   "Output text  by writing to my custom buffer"
-  (let
-      ((output-strings
-        (mapcar 'lbkmk-make-str output-values)))
-    (setq output-strings
-          (cl-remove-if 'null output-strings))
-    (apply 'lbkmk-output-strs output-strings)))
+  (apply 'lbkmk-output-strs
+         (cl-remove-if 'null
+                       (mapcar 'lbkmk-make-str output-values))))
 
 ;; (defun lbkmk-handle-bookmark (bookmark)
 ;;   ;;bookmark is a dotted pair
@@ -197,22 +194,6 @@ reasonable value, as float otherwise"
                         :id (assoc-default 'id json-node)
                         :title (assoc-default 'title json-node)
                         :index (assoc-default 'index json-node)))
-
-(defun lbkmk-get-sample-json-parse ()
-  (with-temp-buffer
-    (insert "{
-\"uri\": \"https://www.google.com/webfonts\",
-\"type\": \"text/x-moz-place\",
-\"dateAdded\": 1362163315000000,
-\"parent\": 3881,
-\"id\": 4190,
-\"title\": \"Google Web Fonts\",
-\"index\": 1
-},")
-    (goto-char    (point-min))
-    (json-read-object)))
-
-(lbkmk-make-moz-place-from-json (lbkmk-get-sample-json-parse))
 
 ;; ((title . "")
 ;;  (id . 1)
