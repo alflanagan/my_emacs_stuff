@@ -83,4 +83,9 @@
 ;;(elpy-use-ipython)
 (elpy-clean-modeline)
 
+;;https://github.com/jorgenschaefer/elpy/issues/137
+(when (require 'flycheck nil t)
+  (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
+  (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
+
 ;;; init.el ends here
