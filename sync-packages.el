@@ -1,5 +1,5 @@
 ;;; sync-packages.el --- Ensure a set list of packages are installed on emacs startup.
-;; -*- fill-column: 120; -*-
+;; -*- coding: utf-8; fill-column: 120; -*-
 ;;; Commentary:
 ;; package namespace prefix: syncpack-
 
@@ -24,14 +24,12 @@
     json-mode              ;; Major mode for editing JSON files
     markdown-mode          ;; Emacs Major mode for Markdown-formatted text files
     paradox                ;; Display Package Ratings on the *Packages* buffer.
-    popup                  ;; Visual Popup User Interface
     rainbow-delimiters     ;; Highlight nested parens, brackets, braces a different color at each depth.
     starter-kit            ;; Saner defaults and goodies.
     starter-kit-bindings   ;; Saner defaults and goodies: bindings
     starter-kit-eshell     ;; Saner defaults and goodies: eshell tweaks
     starter-kit-js         ;; Saner defaults and goodies for Javascript
     starter-kit-lisp       ;; Saner defaults and goodies for lisp languages
-    starter-kit-ruby       ;; Saner defaults and goodies for Ruby
     undo-tree              ;; Treat undo history as a tree
     web-mode               ;; major mode for editing html templates
     yasnippet              ;; Yet another snippet extension for Emacs.
@@ -45,7 +43,7 @@
     ;; but.. baby steps)
 
     ;;; dependencies of starter-kit
-    
+
     find-file-in-project  ;;Find files in a project quickly.
     git-commit-mode       ;;Major mode for editing git commit messages
     git-rebase-mode       ;;Major mode for editing git rebase files
@@ -55,17 +53,17 @@
     paredit               ;;minor mode for editing parentheses
     smex                  ;;M-x interface with Ido-style fuzzy matching.
 
+    ;;; dependencies of starter-kit-lisp
+
+    elisp-slime-nav       ;;Make M-. and M-, work in elisp like they do in slime
+
     ;;; dependencies of flycheck
-    
+
     dash                  ;;A modern list library for Emacs
     epl                   ;;Emacs Package Library
     f                     ;;Modern API for working with files and directories
     pkg-info              ;;Information about packages
     s                     ;;The long lost Emacs string manipulation library.
-
-    ;;; dependencies of starter-kit-lisp
-    
-    elisp-slime-nav       ;;Make M-. and M-, work in elisp like they do in slime
 
     ;;; dependency of starter-kit-ruby
 
@@ -76,15 +74,16 @@
     json-reformat          ;;Reformatting tool for JSON
 
     ;;; dependencies of elpy
-    
+
     ;; auto-complete
     ;; find-file-in-project
-    ;; yasnippet
+    ;; yasnippet  -- dependency, but wanted even w/out elpy
     fuzzy                  ;;Fuzzy Matching
     highlight-indentation  ;;Minor modes for highlighting indentation
     idomenu                ;;imenu tag selection a la ido
     iedit                  ;;Edit multiple regions in the same way simultaneously.
     nose                   ;;Easy Python test running in Emacs
+    popup                  ;; Visual Popup User Interface
     pyvenv                 ;;Python virtual environment interface
 
     ;;; dependencies of paradox
@@ -92,7 +91,7 @@
     tabulated-list         ;;generic major mode for tabulated lists.
 
     ;;; other packages of interest but not automatically installed
-    
+
     ;; bash-completion        ;;BASH completion for the shell buffer
     ;; cython-mode            ;;Major mode for editing Cython files
     ;; discover               ;;discover more of Emacs
