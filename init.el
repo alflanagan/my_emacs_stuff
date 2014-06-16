@@ -44,16 +44,16 @@
   (add-hook 'python-mode-hook 'auto-complete-mode)
   (add-hook 'python-mode-hook 'hs-minor-mode)
   (add-hook 'python-mode-hook 'semantic-mode)
+  (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook  'delete-trailing-whitespace nil t)))
   ;; because ido-ubiquitous doesn't get options right
   (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
-
 (require 'sync-packages)
 (eval-after-load 'package '(syncpack-install-missing-packages))
 ;;(eval-after-load 'package '(add-hooks-for-packages))??
 
-(require 'eldoc) 
+(require 'eldoc)
 (eldoc-add-command
  'paredit-backward-delete
  'paredit-close-round)
