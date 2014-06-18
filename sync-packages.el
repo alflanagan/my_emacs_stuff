@@ -25,6 +25,7 @@
     markdown-mode          ;; Emacs Major mode for Markdown-formatted text files
     paradox                ;; Display Package Ratings on the *Packages* buffer.
     rainbow-delimiters     ;; Highlight nested parens, brackets, braces a different color at each depth.
+    sphinx-doc             ;; Sphinx friendly docstrings for Python functions
     starter-kit            ;; Saner defaults and goodies.
     starter-kit-bindings   ;; Saner defaults and goodies: bindings
     starter-kit-eshell     ;; Saner defaults and goodies: eshell tweaks
@@ -42,70 +43,69 @@
     ;; package (which the package system should detect and warn about,
     ;; but.. baby steps)
 
+    ;;; dependencies of multiple packages -- just assume we need
+    
+    s                     ;; The long lost Emacs string manipulation library.
+    f                     ;; Modern API for working with files and directories
+
     ;;; dependencies of starter-kit
 
-    find-file-in-project  ;;Find files in a project quickly.
-    git-commit-mode       ;;Major mode for editing git commit messages
-    git-rebase-mode       ;;Major mode for editing git rebase files
-    idle-highlight-mode   ;;highlight the word the point is on
-    ido-ubiquitous        ;;Use ido (nearly) everywhere.
-    magit                 ;;control Git from Emacs
-    paredit               ;;minor mode for editing parentheses
-    smex                  ;;M-x interface with Ido-style fuzzy matching.
+    find-file-in-project  ;; Find files in a project quickly.
+    git-commit-mode       ;; Major mode for editing git commit messages
+    git-rebase-mode       ;; Major mode for editing git rebase files
+    idle-highlight-mode   ;; highlight the word the point is on
+    ido-ubiquitous        ;; Use ido (nearly) everywhere.
+    magit                 ;; control Git from Emacs
+    paredit               ;; minor mode for editing parentheses
+    smex                  ;; M-x interface with Ido-style fuzzy matching.
 
     ;;; dependencies of starter-kit-lisp
 
-    elisp-slime-nav       ;;Make M-. and M-, work in elisp like they do in slime
+    elisp-slime-nav       ;; Make M-. and M-, work in elisp like they do in slime
 
     ;;; dependencies of flycheck
 
-    dash                  ;;A modern list library for Emacs
-    epl                   ;;Emacs Package Library
-    f                     ;;Modern API for working with files and directories
-    pkg-info              ;;Information about packages
-    s                     ;;The long lost Emacs string manipulation library.
+    dash                  ;; A modern list library for Emacs
+    epl                   ;; Emacs Package Library
+    pkg-info              ;; Information about packages
 
     ;;; dependency of starter-kit-ruby
 
-    inf-ruby               ;;Run a Ruby process in a buffer
+    inf-ruby               ;; Run a Ruby process in a buffer
 
     ;;; dependency of json-mode
 
-    json-reformat          ;;Reformatting tool for JSON
+    json-reformat          ;; Reformatting tool for JSON
 
     ;;; dependencies of elpy
 
     ;; auto-complete
     ;; find-file-in-project
     ;; yasnippet  -- dependency, but wanted even w/out elpy
-    fuzzy                  ;;Fuzzy Matching
-    highlight-indentation  ;;Minor modes for highlighting indentation
-    idomenu                ;;imenu tag selection a la ido
-    iedit                  ;;Edit multiple regions in the same way simultaneously.
-    nose                   ;;Easy Python test running in Emacs
+    fuzzy                  ;; Fuzzy Matching
+    highlight-indentation  ;; Minor modes for highlighting indentation
+    idomenu                ;; imenu tag selection a la ido
+    iedit                  ;; Edit multiple regions in the same way simultaneously.
+    nose                   ;; Easy Python test running in Emacs
     popup                  ;; Visual Popup User Interface
-    pyvenv                 ;;Python virtual environment interface
+    pyvenv                 ;; Python virtual environment interface
 
     ;;; dependencies of paradox
 
-    tabulated-list         ;;generic major mode for tabulated lists.
+    tabulated-list         ;; generic major mode for tabulated lists.
 
     ;;; other packages of interest but not automatically installed
 
-    ;; bash-completion        ;;BASH completion for the shell buffer
-    ;; cython-mode            ;;Major mode for editing Cython files
-    ;; discover               ;;discover more of Emacs
-    ;; ecb                    ;;a code browser for Emacs
-    ;; el-get                 ;;Manage the external elisp bits and pieces you depend upon
-    ;; goto-chg               ;;goto last change
+    ;; bash-completion        ;; BASH completion for the shell buffer
+    ;; cython-mode            ;; Major mode for editing Cython files
+    ;; discover               ;; discover more of Emacs
+    ;; ecb                    ;; a code browser for Emacs
+    ;; goto-chg               ;; goto last change
     ;; helm                   ;; Helm is an Emacs incremental and narrowing framework
-    ;; icicles                ;;Minibuffer input completion and cycling.
-    ;; jedi                   ;;Python auto-completion for Emacs
-    ;; outline-magic          ;;outline mode extensions for Emacs
-    ;; pep8                   ;;run the python pep8 checker putting hits in a grep buffer
-    ;; python-environment     ;;virtualenv API for Emacs Lisp
-    ;; rainbow-mode           ;;Colorize color names in buffers
-    ;; sphinx-doc             ;;Sphinx friendly docstrings for Python functions
+    ;; icicles                ;; Minibuffer input completion and cycling.
+    ;; outline-magic          ;; outline mode extensions for Emacs
+    ;; pep8                   ;; run the python pep8 checker putting hits in a grep buffer
+    ;; rainbow-mode           ;; Colorize color names in buffers
 
 )
   "List of packages to verify at launch, and install if not present.")
