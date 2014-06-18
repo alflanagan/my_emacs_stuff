@@ -82,6 +82,8 @@
 (elpy-enable)
 ;;(elpy-use-ipython)
 (elpy-clean-modeline)
+;; default of 1 often times out of (elpy-refactor)
+(setq elpy-rpc--timeout 5)
 
 ;;https://github.com/jorgenschaefer/elpy/issues/137
 (when (require 'flycheck nil t)
