@@ -76,6 +76,7 @@
         (push '(">=" . ?≥) prettify-symbols-alist))))
 
 (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+(eval-after-load "rst" '(auto-complete-rst-init))
 
 (package-initialize)
 (require 'elpy)
