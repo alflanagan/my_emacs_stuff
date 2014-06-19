@@ -26,6 +26,8 @@
 ;;install I use goes here.
 
 ;;; Code:
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
 
 ;; token "paradox emacs packages"
 (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
@@ -78,7 +80,6 @@
 (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
 (eval-after-load "rst" '(auto-complete-rst-init))
 
-(package-initialize)
 (require 'elpy)
 (elpy-enable)
 ;;(elpy-use-ipython)
@@ -91,8 +92,5 @@
   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
 
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
-
-
+(global-undo-tree-mode)
 ;;; init.el ends here
