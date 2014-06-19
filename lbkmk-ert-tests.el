@@ -108,7 +108,6 @@
     (goto-char    (point-min))
     (json-read-object)))
 
-
 (ert-deftest lbkmk-test-make-moz-place-from-json ()
     (let ((sample-json 
            (lbkmk-make-json-from-str "{
@@ -145,5 +144,7 @@
                    (make-lbkmk-moz-root :id 1
                                         :dateAdded (lbkmk-convert-moz-time 1328812310196978)
                                         :lastModified (lbkmk-convert-moz-time 1359143022769056)
-                                        :type "text\\/x-moz-place-container")))))
+                                        :type "text/x-moz-place-container"
+                                        :root "placesRoot"
+                                        :children [])))))
 (progn (ert t) nil)
