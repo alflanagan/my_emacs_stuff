@@ -49,8 +49,8 @@
   (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
-(require 'sync-packages)
-(eval-after-load 'package '(syncpack-install-missing-packages))
+;; (require 'sync-packages)
+;; (eval-after-load 'package '(syncpack-install-missing-packages))
 ;;(eval-after-load 'package '(add-hooks-for-packages))??
 
 (require 'eldoc)
@@ -90,5 +90,9 @@
 (when (require 'flycheck nil t)
   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
+
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+
 
 ;;; init.el ends here

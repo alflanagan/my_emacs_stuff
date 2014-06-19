@@ -2,3 +2,4 @@
 *.elc
 *~
 sync_plan.html
+.cask
