@@ -212,10 +212,10 @@ reasonable value, as float otherwise"
   "Given a parsed bookmark file, create the bookmark tree from root."
   (make-lbkmk-moz-root :id (assoc-default 'id json-node)
                        :type  (assoc-default 'type json-node)
-                       :lastModified  (assoc-default  'lastModified json-node)
-                       :dateAdded (assoc-default 'dateAdded json-node)
+                       :lastModified  (lbkmk-convert-moz-time (assoc-default  'lastModified json-node))
+                       :dateAdded (lbkmk-convert-moz-time (assoc-default 'dateAdded json-node))
                        :root (assoc-default 'root json-node)
-                       :children (lbmk-make-moz-root-children-from-json (assoc-default 'children json-node))))
+                       :children (lbkmk-make-moz-root-children-from-json (assoc-default 'children json-node))))
 
 ;; (with-current-buffer (get-buffer-create "*parsed-json*")
 ;;   (insert (pp-to-string lbkmk-json-object)))
