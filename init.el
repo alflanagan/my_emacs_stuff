@@ -23,7 +23,7 @@
 ;;; Commentary:
 
 ;; Any emacs setup which I want to occur on startup for every emacs
-;;install I use goes here.
+;; install I use goes here.
 
 ;;; Code:
 (require 'cask "~/.cask/cask.el")
@@ -31,6 +31,7 @@
 
 ;; token "paradox emacs packages"
 (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
+(setq paradox-automatically-star nil)
 
 (defun add-hooks-for-packages
     ()
@@ -41,7 +42,8 @@
               ;; Use spaces, not tabs.
               (setq indent-tabs-mode nil)))
   (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook (lambda () (if (functionp 'rainbow-delimiters-mode)
+                                            (rainbow-delimiters-mode))))
   (add-hook 'python-mode-hook 'flycheck-mode)
   (add-hook 'python-mode-hook 'auto-complete-mode)
   (add-hook 'python-mode-hook 'hs-minor-mode)
@@ -72,6 +74,8 @@
 
 (defun setup-elisp-prettify ()
   "Add to words auto-converted to unicode symbols."
+  ;; prettify-symbols-alist is part of prog-mode, but only
+  ;; on recent versions of emacs, so check
   (if (boundp 'prettify-symbols-alist)
       (progn
         (push '("<=" . ?≤) prettify-symbols-alist)
@@ -80,17 +84,18 @@
 (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
 (eval-after-load "rst" '(auto-complete-rst-init))
 
-(require 'elpy)
-(elpy-enable)
-;;(elpy-use-ipython)
-(elpy-clean-modeline)
-;; default of 1 often times out of (elpy-refactor)
-(setq elpy-rpc--timeout 5)
+(when (require 'elpy nil t)
+  (elpy-enable)
+  ;;(elpy-use-ipython)
+  (elpy-clean-modeline)
+  ;; default of 1 often times out of (elpy-refactor)
+  (setq elpy-rpc--timeout 5))
 
 ;;https://github.com/jorgenschaefer/elpy/issues/137
-(when (require 'flycheck nil t)
+(when (and (boundp 'elpy-default-minor-modes) (require 'flycheck nil t))
   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
 
-(global-undo-tree-mode)
+(when (require 'undo-tree nil t)
+  (global-undo-tree-mode))
 ;;; init.el ends here
