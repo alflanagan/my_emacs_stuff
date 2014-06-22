@@ -26,12 +26,17 @@
 ;; install I use goes here.
 
 ;;; Code:
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
+(when (and (require 'cask "~/.cask/cask.el" t) (file-exists-p "~/.emacs.d/Cask"))
+  (cask-initialize))
 
 ;; token "paradox emacs packages"
-(setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
-(setq paradox-automatically-star nil)
+(when (require 'paradox nil t)
+  (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
+  (setq paradox-automatically-star nil))
+
+(defun call-if-exists (some-func)
+  (if (functionp some-func)
+      (funcall some-func)))
 
 (defun add-hooks-for-packages
     ()
@@ -41,9 +46,8 @@
               ()
               ;; Use spaces, not tabs.
               (setq indent-tabs-mode nil)))
-  (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode)
-  (add-hook 'emacs-lisp-mode-hook (lambda () (if (functionp 'rainbow-delimiters-mode)
-                                            (rainbow-delimiters-mode))))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (call-if-exists 'auto-complete-mode)))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (call-if-exists 'rainbow-delimiters-mode)))
   (add-hook 'python-mode-hook 'flycheck-mode)
   (add-hook 'python-mode-hook 'auto-complete-mode)
   (add-hook 'python-mode-hook 'hs-minor-mode)
@@ -82,9 +86,15 @@
         (push '(">=" . ?≥) prettify-symbols-alist))))
 
 (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+(declare-function auto-complete-rst-init "auto-complete" nil)
 (eval-after-load "rst" '(auto-complete-rst-init))
 
+;; byte-compiler doesn't know about symbols if elpy not present
+(defvar elpy-rpc--timeout)
+
 (when (require 'elpy nil t)
+  (declare-function elpy-enable "elpy" nil)
+  (declare-function elpy-clean-modeline "elpy" nil)
   (elpy-enable)
   ;;(elpy-use-ipython)
   (elpy-clean-modeline)
@@ -97,5 +107,6 @@
   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
 
 (when (require 'undo-tree nil t)
+  (declare-function global-undo-tree-mode "undo-tree" nil)
   (global-undo-tree-mode))
 ;;; init.el ends here
