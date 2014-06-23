@@ -31,25 +31,26 @@
 
 ;; token "paradox emacs packages"
 (when (require 'paradox nil t)
+  (defvar paradox-github-token)
+  (defvar paradox-automatically-star)
   (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
   (setq paradox-automatically-star nil))
 
-(defun call-if-exists (some-func)
-  (if (functionp some-func)
-      (funcall some-func)))
+(defmacro add-hook-if-exists (a-hook a-function &rest args)
+  "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
+                    `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
+                                                 (funcall ,a-function ,@args)))))
 
 (defun add-hooks-for-packages
     ()
-  "Set up hooks which depend on packages that may not be synched on startup"
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda
-              ()
-              ;; Use spaces, not tabs.
-              (setq indent-tabs-mode nil)))
-  (add-hook 'emacs-lisp-mode-hook (lambda () (call-if-exists 'auto-complete-mode)))
-  (add-hook 'emacs-lisp-mode-hook (lambda () (call-if-exists 'rainbow-delimiters-mode)))
-  (add-hook 'python-mode-hook 'flycheck-mode)
-  (add-hook 'python-mode-hook 'auto-complete-mode)
+  "Set up hooks which depend on packages that may not be synched on startup."
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil))) ;; Use spaces, not tabs.
+  (add-hook-if-exists 'emacs-lisp-mode-hook 'auto-complete-mode)
+  (add-hook-if-exists 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook-if-exists 'emacs-lisp-mode-hook 'flycheck-mode)
+  (add-hook emacs-lisp-mode-hook 'semantic-mode)
+  (add-hook-if-exists 'python-mode-hook 'flycheck-mode)
+  (add-hook-if-exists 'python-mode-hook 'auto-complete-mode)
   (add-hook 'python-mode-hook 'hs-minor-mode)
   (add-hook 'python-mode-hook 'semantic-mode)
   (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook  'delete-trailing-whitespace nil t)))
