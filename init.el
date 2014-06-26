@@ -48,7 +48,7 @@
   (add-hook-if-exists 'emacs-lisp-mode-hook 'auto-complete-mode)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'flycheck-mode)
-  (add-hook emacs-lisp-mode-hook 'semantic-mode)
+  (add-hook 'emacs-lisp-mode-hook 'semantic-mode)
   (add-hook-if-exists 'python-mode-hook 'flycheck-mode)
   (add-hook-if-exists 'python-mode-hook 'auto-complete-mode)
   (add-hook 'python-mode-hook 'hs-minor-mode)
