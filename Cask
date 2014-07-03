@@ -1,7 +1,8 @@
 ;; -*- mode: emacs-lisp; coding: utf-8 -*-
 (source gnu)
-(source melpa)
-(source "elpy" "http://jorgenschaefer.github.io/packages/")
+(source melpa-stable)
+;;(source "elpy" "http://jorgenschaefer.github.io/packages/")
+;;(source "elpy" "https://github.com/alflanagan/elpy.git")
 
 (depends-on "auto-complete")
 (depends-on "bind-key")
@@ -37,6 +38,7 @@
 (depends-on "starter-kit-eshell")
 (depends-on "starter-kit-js")
 (depends-on "starter-kit-lisp")
+(depends-on "tempbuf")
 (depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "web-mode")
