@@ -87,8 +87,16 @@
         (push '(">=" . ?≥) prettify-symbols-alist))))
 
 (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+
 (declare-function auto-complete-rst-init "auto-complete" nil)
-(eval-after-load "rst" '(auto-complete-rst-init))
+(eval-after-load "rst"
+  (quote
+   (if
+       (functionp 'auto-complete-rst-init)
+       (auto-complete-rst-init))))
+
+(if (functionp 'ipretty-mode)
+    (add-hook 'emacs-lisp-mode-hook 'ipretty-mode))
 
 ;; byte-compiler doesn't know about symbols if elpy not present
 (defvar elpy-rpc--timeout)
