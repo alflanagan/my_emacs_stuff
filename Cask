@@ -8,6 +8,7 @@
 (depends-on "cask")
 (depends-on "dash")
 (depends-on "drag-stuff")
+(depends-on "easy-kill")
 (depends-on "elpy")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
