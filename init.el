@@ -1,10 +1,10 @@
-;;; init.el -- Non-site-specific initialization not controlled by customize.
+;;; init.el -- Non-site-specific initialization -*- lexical-binding: t -*-
 ;; Copyright © 2014, A. Lloyd Flanagan
 
 ;; Author: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
 ;; Maintainer: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
 ;; Created: 2014
-;; Version: 0.02
+;; Version: 0.03
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,25 +25,33 @@
 ;; Any emacs setup which I want to occur on startup for every emacs
 ;; install I use goes here.
 
-;;; Code:
-(when (and (require 'cask "~/.cask/cask.el" t) (file-exists-p "~/.emacs.d/Cask"))
-  (cask-initialize))
+;; Note that mainly operations are added to `after-init-hook` to
+;; ensure that packages are setup before they're called.
 
-;; token "paradox emacs packages"
-(when (require 'paradox nil t)
-  (defvar paradox-github-token)
-  (defvar paradox-automatically-star)
-  (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
-  (setq paradox-automatically-star nil))
+;;; Code:
+(when (and (require 'cask "~/.cask/cask.el" t)
+           ; should we initialize even without Cask?
+           (file-exists-p  (expand-file-name "Cask" user-emacs-directory)))
+  (declare-function cask-initialize "cask" (&optional project-path))
+  (cask-initialize))
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
   "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
                     `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
                                                  (funcall ,a-function ,@args)))))
 
-(defun add-hooks-for-packages
-    ()
-  "Set up hooks which depend on packages that may not be synched on startup."
+(defun setup-elisp-prettify ()
+  "Add to words auto-converted to unicode symbols."
+  ;; prettify-symbols-alist is part of prog-mode, but only
+  ;; on recent versions of emacs, so check
+  ;; it's automatically buffer-local, so add to mode hook
+  (if (boundp 'prettify-symbols-alist)
+      (progn
+        (push '("<=" . ?≤) prettify-symbols-alist)
+        (push '(">=" . ?≥) prettify-symbols-alist))))
+
+(defun add-hooks-for-packages ()
+  "Set up hooks which depend on packages that need to be initialized by package system."
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil))) ;; Use spaces, not tabs.
   (add-hook-if-exists 'emacs-lisp-mode-hook 'auto-complete-mode)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
@@ -55,72 +63,82 @@
   (add-hook 'python-mode-hook 'semantic-mode)
   (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook  'delete-trailing-whitespace nil t)))
   ;; because ido-ubiquitous doesn't get options right
-  (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode))
+  (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode)
+  (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+  (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
-;; (require 'sync-packages)
-;; (eval-after-load 'package '(syncpack-install-missing-packages))
-;;(eval-after-load 'package '(add-hooks-for-packages))??
 
-(require 'eldoc)
-(eldoc-add-command
- 'paredit-backward-delete
- 'paredit-close-round)
+(defun set-up-paradox-variables ()
+  "Set up config variables for paradox package ratings."
+  ;; don't use require, should load through cask
+  (when (functionp 'paradox-list-packages)
+    (defvar paradox-github-token)
+    (defvar paradox-automatically-star)
+    ;; token "paradox emacs packages" (github.com)
+    (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
+    (setq paradox-automatically-star nil)))
 
-;;don't call server-start if server is already running
-;;test copied from server.el
-(require 'server)
-(let ((file (expand-file-name "server"
-                              (if server-use-tcp
-                                  server-auth-dir
-                                server-socket-dir))))
-  (if (not (file-exists-p file))
-      (server-start)))
+(defun start-server-if-none ()
+  "Start the server processes, unless another process already has."
+  ;; test copied from server.el
+  (require 'server)
+  (let ((file (expand-file-name "server"
+                                (if server-use-tcp
+                                    server-auth-dir
+                                  server-socket-dir))))
+    (if (not (file-exists-p file))
+        (server-start))))
 
-(defun setup-elisp-prettify ()
-  "Add to words auto-converted to unicode symbols."
-  ;; prettify-symbols-alist is part of prog-mode, but only
-  ;; on recent versions of emacs, so check
-  (if (boundp 'prettify-symbols-alist)
-      (progn
-        (push '("<=" . ?≤) prettify-symbols-alist)
-        (push '(">=" . ?≥) prettify-symbols-alist))))
+(defun set-up-rst-auto-complete ()
+  "Set up auto-complete for `rst-mode` using package `auto-complete-rst`."
+  (when (functionp 'auto-complete-rst-init)
+      (auto-complete-rst-init)))
 
-(add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+(defun set-up-elpy ()
+  "Enable `elpy` package and set up options."
+  (when (functionp 'elpy-enable)
+    (declare-function elpy-enable "elpy"  (&optional skip-initialize-variables))
+    (declare-function elpy-clean-modeline "elpy" nil)
+    (elpy-enable)
+    ;;(elpy-use-ipython)
+    (elpy-clean-modeline)
+    ;; default of 1 often times out of (elpy-refactor)
+    (setq elpy-rpc--timeout 5))
 
-(declare-function auto-complete-rst-init "auto-complete" nil)
-(eval-after-load "rst"
-  (quote
-   (if
-       (functionp 'auto-complete-rst-init)
-       (auto-complete-rst-init))))
+  ;;https://github.com/jorgenschaefer/elpy/issues/137
+  (when (and (boundp 'elpy-default-minor-modes) (functionp 'flycheck-mode))
+    (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
+    (add-to-list 'elpy-default-minor-modes 'flycheck-mode)))
 
-(if (functionp 'ipretty-mode)
-    (add-hook 'emacs-lisp-mode-hook 'ipretty-mode))
+(defun set-up-global-undo-tree ()
+  "Enable `undo-tree` mode wherever it makes sense."
+  (when (functionp 'global-undo-tree-mode)
+    (global-undo-tree-mode)))
 
-;; byte-compiler doesn't know about symbols if elpy not present
-(defvar elpy-rpc--timeout)
+(defun set-up-easy-kill ()
+  "Replace standard `kill-ring-save` and `mark-sexp` bindings."
+  (when (functionp 'easy-kill)
+    (global-set-key [remap kill-ring-save] 'easy-kill)
+    (global-set-key [remap mark-sexp] 'easy-mark)))
 
-(when (require 'elpy nil t)
-  (declare-function elpy-enable "elpy" nil)
-  (declare-function elpy-clean-modeline "elpy" nil)
-  (elpy-enable)
-  ;;(elpy-use-ipython)
-  (elpy-clean-modeline)
-  ;; default of 1 often times out of (elpy-refactor)
-  (setq elpy-rpc--timeout 5))
+(defun set-up-eldoc ()
+  "Keep `eldoc` from interfering with `paredit`.  We hope."
+  (if (functionp 'eldoc-add-command)
+      (eldoc-add-command
+       'paredit-backward-delete
+       'paredit-close-round)))
 
-;;https://github.com/jorgenschaefer/elpy/issues/137
-(when (and (boundp 'elpy-default-minor-modes) (require 'flycheck nil t))
-  (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
-  (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
+(defun set-up-packages ()
+  "Does various setup and initialization operations."
+  (start-server-if-none)
+  (set-up-rst-auto-complete)
+  (set-up-paradox-variables)
+  (set-up-elpy)
+  (set-up-global-undo-tree)
+  (set-up-easy-kill)
+  (set-up-eldoc))
 
-(when (require 'undo-tree nil t)
-  (declare-function global-undo-tree-mode "undo-tree" nil)
-  (global-undo-tree-mode))
-
-(when (require 'easy-kill nil t)
-  (global-set-key [remap kill-ring-save] 'easy-kill)
-  (global-set-key [remap mark-sexp] 'easy-mark))
+(add-hook 'after-init-hook 'set-up-packages)
 
 ;;; init.el ends here
