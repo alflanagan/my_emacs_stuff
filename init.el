@@ -1,4 +1,5 @@
-;;; init.el -- Non-site-specific initialization -*- lexical-binding: t -*-
+;;; init.el -- Non-site-specific initialization - * - lexical-binding: t -*-
+;; lexical bind causes problems with add-hook??
 ;; Copyright © 2014, A. Lloyd Flanagan
 
 ;; Author: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
@@ -35,10 +36,15 @@
   (declare-function cask-initialize "cask" (&optional project-path))
   (cask-initialize))
 
+;; (defmacro add-hook-if-exists (a-hook a-function &rest args)
+;;   "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
+;;                     `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
+;;                                                  (funcall ,a-function ,@args)))))
+
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
-  "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
-                    `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
-                                                 (funcall ,a-function ,@args)))))
+  `(add-hook ,a-hook 'wilma))
+
+(macroexpand  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
 
 (defun setup-elisp-prettify ()
   "Add to words auto-converted to unicode symbols."
@@ -65,8 +71,14 @@
   ;; because ido-ubiquitous doesn't get options right
   (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode)
   (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
-  (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode))
+  (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode)
+  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
+(setq js2-mode-hook nil)
+(add-hook 'js2-mode-hook 'ipretty-mode)
+(add-hook 'js2-mode-hook 'fred)
 
+;;(setq js2-mode-hook nil)
+;;(add-hook 'js2-mode-hook 'prettify-symbols-mode)
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
 (defun set-up-paradox-variables ()
@@ -141,7 +153,8 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
         (file-mode-exp-set-interpreter-mode "node" 'js2-mode)
         ;; and while we're at it, set up file extension
         (while (rassoc 'javascript-mode auto-mode-alist)
-          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode)))
+          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode))
+        (add-hook 'js2-mode-hook '))
     ;; at least set up node interpreter anyway
     (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)))
 
