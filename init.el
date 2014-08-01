@@ -129,6 +129,22 @@
        'paredit-backward-delete
        'paredit-close-round)))
 
+;; just do load-file until I get set up as package
+;;(load-file "file-mode-exp.el")
+(require 'file-mode-exp)
+(defun set-up-js2-mode ()
+  "Tell Emacs to use `js2-mode' for files with interpreter \"node\".
+
+If `js2-mode' is not found, falls back to `javascript-mode'."
+  (if (functionp 'js2-mode)
+      (progn 
+        (file-mode-exp-set-interpreter-mode "node" 'js2-mode)
+        ;; and while we're at it, set up file extension
+        (while (rassoc 'javascript-mode auto-mode-alist)
+          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode)))
+    ;; at least set up node interpreter anyway
+    (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)))
+
 (defun set-up-packages ()
   "Does various setup and initialization operations."
   (start-server-if-none)
@@ -137,8 +153,11 @@
   (set-up-elpy)
   (set-up-global-undo-tree)
   (set-up-easy-kill)
-  (set-up-eldoc))
+  (set-up-eldoc)
+  (set-up-js2-mode))
 
 (add-hook 'after-init-hook 'set-up-packages)
+
+
 
 ;;; init.el ends here
