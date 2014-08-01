@@ -118,4 +118,9 @@
 (when (require 'undo-tree nil t)
   (declare-function global-undo-tree-mode "undo-tree" nil)
   (global-undo-tree-mode))
+
+(when (require 'easy-kill nil t)
+  (global-set-key [remap kill-ring-save] 'easy-kill)
+  (global-set-key [remap mark-sexp] 'easy-mark))
+
 ;;; init.el ends here
