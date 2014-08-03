@@ -36,15 +36,15 @@
   (declare-function cask-initialize "cask" (&optional project-path))
   (cask-initialize))
 
-;; (defmacro add-hook-if-exists (a-hook a-function &rest args)
-;;   "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
-;;                     `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
-;;                                                  (funcall ,a-function ,@args)))))
-
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
-  `(add-hook ,a-hook 'wilma))
+   "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
+                     `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
+						       (funcall ,a-function ,@args)))))
 
-(macroexpand  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
+;; (defmacro add-hook-if-exists (a-hook a-function &rest args)
+;;   `(add-hook ,a-hook 'wilma))
+
+;; (macroexpand  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
 
 (defun setup-elisp-prettify ()
   "Add to words auto-converted to unicode symbols."
@@ -73,9 +73,9 @@
   (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode)
   (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
-(setq js2-mode-hook nil)
-(add-hook 'js2-mode-hook 'ipretty-mode)
-(add-hook 'js2-mode-hook 'fred)
+;; (setq js2-mode-hook nil)
+;; (add-hook 'js2-mode-hook 'ipretty-mode)
+;; (add-hook 'js2-mode-hook 'fred)
 
 ;;(setq js2-mode-hook nil)
 ;;(add-hook 'js2-mode-hook 'prettify-symbols-mode)
@@ -144,6 +144,7 @@
 ;; just do load-file until I get set up as package
 ;;(load-file "file-mode-exp.el")
 (require 'file-mode-exp)
+
 (defun set-up-js2-mode ()
   "Tell Emacs to use `js2-mode' for files with interpreter \"node\".
 
@@ -154,14 +155,21 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
         ;; and while we're at it, set up file extension
         (while (rassoc 'javascript-mode auto-mode-alist)
           (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode))
-        (add-hook 'js2-mode-hook '))
+        ;;(add-hook 'js2-mode-hook ')
+        )
     ;; at least set up node interpreter anyway
-    (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)))
+    (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)
+    (file-mode-exp-set-interpreter-mode "nodejs" 'javascript-mode)))
+
+(defmacro error-into-message (body)
+  `(condition-case err-data
+       ,body
+     ((error debug) (message "init failure! type %s, msg %s" (car err-data) (cdr err-data)))))
 
 (defun set-up-packages ()
   "Does various setup and initialization operations."
-  (start-server-if-none)
-  (set-up-rst-auto-complete)
+  (error-into-message (start-server-if-none))
+  (error-into-message (set-up-rst-auto-complete))
   (set-up-paradox-variables)
   (set-up-elpy)
   (set-up-global-undo-tree)
