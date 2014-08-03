@@ -25,8 +25,14 @@
  )
 (put 'scroll-left 'disabled nil)
 
+(when (file-exists-p "~/.emacs-site.el")
+  (load-file "~/.emacs-site.el"))
+
 ;; must be after custom-set-variables as melpa archive is required
-(add-to-list 'load-path "~/Devel/emacs/")
+(if (boundp `emacs-sync-directory)
+    (add-to-list 'load-path emacs-sync-directory)
+  (add-to-list 'load-path "/home/lloyd/Devel/my_emacs_stuff"))
+
 (load-file (locate-file "init.el" load-path))
 
 (provide '.emacs)
