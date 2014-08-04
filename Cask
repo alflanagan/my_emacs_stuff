@@ -31,6 +31,7 @@
 (depends-on "paradox")
 ;;(depends-on "plsql")
 (depends-on "popwin")
+(depends-on "pretty-symbols-mode")
 (depends-on "prodigy")
 (depends-on "projectile")
 (depends-on "rainbow-delimiters")
