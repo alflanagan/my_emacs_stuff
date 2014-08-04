@@ -46,8 +46,11 @@
 
 ;; (macroexpand  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
 
-(defun setup-elisp-prettify ()
+(defun setup-elisp-pretty ()
   "Add to words auto-converted to unicode symbols."
+  ;; if we've got pretty-symbols-mode, enable multiple categories
+  (if (boundp 'pretty-symbol-categories)
+      (setq pretty-symbol-categories '(lambda relational logical)))
   ;; prettify-symbols-alist is part of prog-mode, but only
   ;; on recent versions of emacs, so check
   ;; it's automatically buffer-local, so add to mode hook
@@ -70,15 +73,11 @@
   (add-hook 'python-mode-hook (lambda () (add-hook 'before-save-hook  'delete-trailing-whitespace nil t)))
   ;; because ido-ubiquitous doesn't get options right
   (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode)
-  (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+  ;;  (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
+  (add-hook 'emacs-lisp-mode-hook 'pretty-symbols-mode)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode)
-  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
-;; (setq js2-mode-hook nil)
-;; (add-hook 'js2-mode-hook 'ipretty-mode)
-;; (add-hook 'js2-mode-hook 'fred)
+  (add-hook-if-exists 'js2-mode-hook 'pretty-symbols-mode))
 
-;;(setq js2-mode-hook nil)
-;;(add-hook 'js2-mode-hook 'prettify-symbols-mode)
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
 (defun set-up-paradox-variables ()
@@ -139,8 +138,6 @@
        'paredit-backward-delete
        'paredit-close-round)))
 
-;; just do load-file until I get set up as package
-;;(load-file "file-mode-exp.el")
 (require 'file-mode-exp)
 
 (defun set-up-js2-mode ()
@@ -150,6 +147,7 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
   (if (functionp 'js2-mode)
       (progn 
         (file-mode-exp-set-interpreter-mode "node" 'js2-mode)
+        (file-mode-exp-set-interpreter-mode "nodejs" 'js2-mode)
         ;; and while we're at it, set up file extension
         (while (rassoc 'javascript-mode auto-mode-alist)
           (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode))
