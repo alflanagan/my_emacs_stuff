@@ -1,10 +1,8 @@
-;;; .emacs -- Master customization file.
+;;; .emacs -- Master customization file. -*- lexical-binding: t -*-
 
 ;;; Commentary:
-
-;; TODO: customizations that should be synchronized across emacs
-;; installs should be done outside customize; customize works best for
-;; local settings only.
+;; Note that most customization is located in init.el, which is
+;; source-controlled (git) and suitable for all my emacs installs
 
 ;;; Code:
 
@@ -22,18 +20,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.5))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.2)))))
+
 (put 'scroll-left 'disabled nil)
 
-(when (file-exists-p "~/.emacs-site.el")
-  (load-file "~/.emacs-site.el"))
+(if (file-exists-p "~/.emacs-site.el")
+    (load-file "~/.emacs-site.el")
+  (message "[init] no local .emacs-site.el file found."))
 
-;; must be after custom-set-variables as melpa archive is required
-(if (boundp `emacs-sync-directory)
+(if (boundp 'emacs-sync-directory)
     (add-to-list 'load-path emacs-sync-directory)
-  (add-to-list 'load-path "/home/lloyd/Devel/my_emacs_stuff"))
+  (message "[init] emacs-sync-directory not set, not added to load-path."))
 
-(load-file (locate-file "init.el" load-path))
+(let ((init-file (locate-file "init.el" load-path)))
+  (if init-file
+      (load-file init-file)
+    (message "[init] skipped loading init.el, file not found.")))
 
 (provide '.emacs)
 
