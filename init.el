@@ -111,12 +111,10 @@
   "Enable `elpy` package and set up options."
   (when (functionp 'elpy-enable)
     (declare-function elpy-enable "elpy"  (&optional skip-initialize-variables))
-    (declare-function elpy-clean-modeline "elpy" nil)
-    (elpy-enable)
+    (elpy-enable))
     ;;(elpy-use-ipython)
-    (elpy-clean-modeline)
     ;; default of 1 often times out of (elpy-refactor)
-    (setq elpy-rpc--timeout 5))
+    ;; (setq elpy-rpc--timeout 5)
 
   ;;https://github.com/jorgenschaefer/elpy/issues/137
   (when (and (boundp 'elpy-default-minor-modes) (functionp 'flycheck-mode))
@@ -181,7 +179,5 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
   (error-into-message (set-up-js2-mode)))
 
 (add-hook 'after-init-hook 'set-up-packages)
-
-
 
 ;;; init.el ends here
