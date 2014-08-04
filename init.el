@@ -164,18 +164,21 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
 (defmacro error-into-message (body)
   `(condition-case err-data
        ,body
-     ((error debug) (message "init failure! type %s, msg %s" (car err-data) (cdr err-data)))))
+     ((error debug) (message "[init] failure! type %s, msg %s in %s."
+                             (car err-data)
+                             (cdr err-data)
+                             (car ',body)))))
 
 (defun set-up-packages ()
   "Does various setup and initialization operations."
   (error-into-message (start-server-if-none))
   (error-into-message (set-up-rst-auto-complete))
-  (set-up-paradox-variables)
-  (set-up-elpy)
-  (set-up-global-undo-tree)
-  (set-up-easy-kill)
-  (set-up-eldoc)
-  (set-up-js2-mode))
+  (error-into-message (set-up-paradox-variables))
+  (error-into-message (set-up-elpy))
+  (error-into-message (set-up-global-undo-tree))
+  (error-into-message (set-up-easy-kill))
+  (error-into-message (set-up-eldoc))
+  (error-into-message (set-up-js2-mode)))
 
 (add-hook 'after-init-hook 'set-up-packages)
 
