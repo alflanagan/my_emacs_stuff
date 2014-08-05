@@ -158,6 +158,7 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
     (file-mode-exp-set-interpreter-mode "nodejs" 'javascript-mode)))
 
 (defmacro error-into-message (body)
+  "Catch error in BODY, write message."
   `(condition-case err-data
        ,body
      ((error debug) (message "[init] failure! type %s, msg %s in %s."
