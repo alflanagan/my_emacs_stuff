@@ -48,5 +48,6 @@
 (depends-on "tabulated-list")
 (depends-on "undo-tree")
 (depends-on "use-package")
+(depends-on "web-beautify")
 (depends-on "web-mode")
 (depends-on "yasnippet")
