@@ -157,6 +157,17 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
     (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)
     (file-mode-exp-set-interpreter-mode "nodejs" 'javascript-mode)))
 
+(defun set-up-web-beautify ()
+  "Set up keys to invoke web-beautify in appropriate modes."
+  (eval-after-load 'js2-mode
+    '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+  (eval-after-load 'json-mode
+    '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+  (eval-after-load 'sgml-mode
+    '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+  (eval-after-load 'css-mode
+    '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css)))
+
 (defmacro error-into-message (body)
   "Catch error in BODY, write message."
   `(condition-case err-data
@@ -175,7 +186,8 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
   (error-into-message (set-up-global-undo-tree))
   (error-into-message (set-up-easy-kill))
   (error-into-message (set-up-eldoc))
-  (error-into-message (set-up-js2-mode)))
+  (error-into-message (set-up-js2-mode))
+  (error-into-message (set-up-web-beautify)))
 
 (add-hook 'after-init-hook 'set-up-packages)
 
