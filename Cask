@@ -2,6 +2,7 @@
 (source gnu)
 (source "elpy" "http://jorgenschaefer.github.io/packages/")
 (source melpa)
+(source marmalade)
 
 (depends-on "auto-complete")
 (depends-on "bind-key")
