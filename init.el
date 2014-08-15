@@ -74,7 +74,7 @@
   ;; because ido-ubiquitous doesn't get options right
   (add-hook 'ert-simple-view-mode-hook 'ido-ubiquitous-mode)
   ;;  (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
-  (add-hook 'emacs-lisp-mode-hook 'pretty-symbols-mode)
+  (add-hook-if-exists 'emacs-lisp-mode-hook 'pretty-symbols-mode)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode)
   (add-hook-if-exists 'js2-mode-hook 'pretty-symbols-mode))
 
@@ -160,13 +160,21 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
 (defun set-up-web-beautify ()
   "Set up keys to invoke web-beautify in appropriate modes."
   (eval-after-load 'js2-mode
-    '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+    (lambda ()
+      (if (boundp 'js2-mode-map)
+          (define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))))
   (eval-after-load 'json-mode
-    '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+    (lambda ()
+      (if (boundp 'json-mode-map)
+          (define-key json-mode-map (kbd "C-c b") 'web-beautify-js))))
   (eval-after-load 'sgml-mode
-    '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+    (lambda ()
+      (if (boundp 'html-mode-map)
+          (define-key html-mode-map (kbd "C-c b") 'web-beautify-html))))
   (eval-after-load 'css-mode
-    '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css)))
+    (lambda ()
+      (if (boundp 'css-mode-map)
+          (define-key css-mode-map (kbd "C-c b") 'web-beautify-css)))))
 
 (defmacro error-into-message (body)
   "Catch error in BODY, write message."
