@@ -53,9 +53,8 @@
       (setq pretty-symbol-categories '(lambda relational logical)))
   ;; prettify-symbols-alist is part of prog-mode, but only
   ;; on recent versions of emacs, so check
-  ;; it's automatically buffer-local, so add to mode hook
   (if (boundp 'prettify-symbols-alist)
-      (progn
+      (progn  ;; it's automatically buffer-local, so add to mode hook
         (push '("<=" . ?≤) prettify-symbols-alist)
         (push '(">=" . ?≥) prettify-symbols-alist))))
 
@@ -112,8 +111,6 @@
     (declare-function elpy-enable "elpy"  (&optional skip-initialize-variables))
     (elpy-enable))
     ;;(elpy-use-ipython)
-    ;; default of 1 often times out of (elpy-refactor)
-    ;; (setq elpy-rpc--timeout 5)
 
   ;;https://github.com/jorgenschaefer/elpy/issues/137
   (when (and (boundp 'elpy-default-minor-modes) (functionp 'flycheck-mode))
