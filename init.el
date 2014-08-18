@@ -30,6 +30,10 @@
 ;; ensure that packages are setup before they're called.
 
 ;;; Code:
+(require 'secret-data)
+(require 'file-mode-exp)
+
+
 (when (and (require 'cask "~/.cask/cask.el" t)
            ; should we initialize even without Cask?
            (file-exists-p  (expand-file-name "Cask" user-emacs-directory)))
@@ -38,8 +42,8 @@
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
    "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
-                     `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
-						       (funcall ,a-function ,@args)))))
+   `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
+                                (funcall ,a-function ,@args)))))
 
 ;; (defmacro add-hook-if-exists (a-hook a-function &rest args)
 ;;   `(add-hook ,a-hook 'wilma))
@@ -86,7 +90,7 @@
     (defvar paradox-github-token)
     (defvar paradox-automatically-star)
     ;; token "paradox emacs packages" (github.com)
-    (setq paradox-github-token "203b6e30c0c11af83706cc718380ca09c7edb7ae")
+    (setq paradox-github-token (secret-data-get-key "paradox-github-token"))
     (setq paradox-automatically-star nil)))
 
 (defun start-server-if-none ()
@@ -134,8 +138,6 @@
       (eldoc-add-command
        'paredit-backward-delete
        'paredit-close-round)))
-
-(require 'file-mode-exp)
 
 (defun set-up-js2-mode ()
   "Tell Emacs to use `js2-mode' for files with interpreter \"node\".
