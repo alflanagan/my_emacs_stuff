@@ -22,15 +22,44 @@
   (should (equal (lbkmk-convert-moz-time nil) nil)))
 
 
+;; (defun environment-has-key-p (key)
+;;   "True if the process' initial environment has a value for key string KEY."
+;;   (let ((sprefix (format "%s=" (upcase key))))
+;;     (-any?
+;;      '---truthy?
+;;      (mapcar
+;;       (lambda (x) (string-prefix-p sprefix x))
+;;       initial-environment))))
+
+
+(defun value-from-initial-environment (key)
+  "Return the value assigned to KEY in the process initial environment, or nil."
+  (cadr (assoc key  (mapcar (lambda (x) (split-string x "=")) initial-environment))))
+
+
 ;;; **** lbkmk-format-moz-time-iso-8601 ****
-(ert-deftest lbkmk-test-format-moz-time-iso-8601 ()
-  "Unit tests for lbkmk-format-moz-time-iso-8601."
+(defun lbkmk-test-format-moz-time-iso-8601-UTC ()
+  "Test `lbkmk-format-moz-time-iso-8601' assuming server is set to UTC time."
   (should (equal
            (lbkmk-format-moz-time-iso-8601 0.0)
-           "1969-12-31T19:00:00-0500"))
+           "1970-01-01T00:00:00-0000"))
   (should (equal
            (lbkmk-format-moz-time-iso-8601 (* 1000000  1399864605.1600919))
            "2014-05-11T23:16:45-0400")))
+
+(ert-deftest lbkmk-test-format-moz-time-iso-8601 ()
+  "Unit tests for lbkmk-format-moz-time-iso-8601."
+  ;; right thing to do: adjust expected result for local time zone
+  ;; doing instead: special check for Travis ( = UTC)
+  (if (not (value-from-initial-environment "TRAVIS"))
+      (progn (should (equal
+                      (lbkmk-format-moz-time-iso-8601 0.0)
+                      "1969-12-31T19:00:00-0500"))
+             (should (equal
+                      (lbkmk-format-moz-time-iso-8601 (* 1000000  1399864605.1600919))
+                      "2014-05-11T23:16:45-0400")))
+    (lbkmk-test-format-moz-time-iso-8601-UTC))
+  )
 
 ;;; **** lbkmk-fuzzy-float-str ****
 (ert-deftest lbkmk-test-fuzzy-float-str ()
