@@ -13,13 +13,12 @@
   ;; TODO: this is severely over-complicated -- simplify
   (let ((temp-file-name  (make-temp-file "secret-data-test"))
         (return-value nil))
-    (message "TEMP-FILE-NAME is '%s'" temp-file-name)
+    ;;(message "TEMP-FILE-NAME is '%s'" temp-file-name)
     (unwind-protect
         (progn (with-temp-file temp-file-name
                  (insert "value1=somerandomstring\npinboard-user-name=a.lloyd.flanagan\nsome-password=aA@#%&*$@#$@#$\\_KRr\nthis-is-a-test=has=equal=signs\ntest-whitespace=this is spaced\tand\ttabbed"))
-               (message "created %s." temp-file-name)
-               ;; 
-               (mapc (lambda (arg) (message "ARG is %s" arg)) args)
+               ;;(message "created %s." temp-file-name)
+               ;;(mapc (lambda (arg) (message "ARG is %s" arg)) args)
                (setq return-value (apply a-function (append args (list temp-file-name))))
                (delete-file temp-file-name)
                return-value)

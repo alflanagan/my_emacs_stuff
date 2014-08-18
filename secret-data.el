@@ -8,6 +8,12 @@
 
 (require 'cl-lib)
 
+
+(defsubst string-join (strings &optional separator)
+  "Join all STRINGS using SEPARATOR."
+  (mapconcat 'identity strings separator))
+
+
 (defcustom secret-data-store-file "~/.emacs-secret"
   "The file name used to store secret (well, semi-secret) data."
   :group 'secret-data
