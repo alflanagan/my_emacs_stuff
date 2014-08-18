@@ -3,6 +3,12 @@ my_emacs_stuff
 
 Various emacs initialization and program files, of interest mostly to me.
 
-However, I am working on a scheme to synchronize my emacs initializations
-across various machines and platforms. This may eventually become something
-useful. See sync_plan.txt for an outline.
+I've set up some customization options in file I can share across the
+multiple systems where I run emacs, as well as a file to use Cask to
+manage installed packages.
+
+Some of the Lisp code has tests, currently they are
+
+.. image:: https://secure.travis-ci.org/alflanagan/my_emacs_stuff.png?branch=master
+   :target: http://travis-ci.org/alflanagan/my_emacs_stuff?branch=master
+
