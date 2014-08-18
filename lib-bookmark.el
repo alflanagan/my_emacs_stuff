@@ -1,5 +1,4 @@
-;; -*- coding: utf-8; lexical-binding: t -*-
-;;; lib-bookmark.el --- Browser bookmark file browsing & conversion
+;;; lib-bookmark.el --- Browser bookmark file browsing & conversion -*- lexical-binding: t -*-
 ;; namespace prefix for this file: lbkmk-
 
 ;; Copyright (C) 2014 A. Lloyd Flanagan
@@ -32,50 +31,56 @@
 
 
 ;;; Code:
-
-(eval-when-compile (require 'json))
+(require 'json)
 (eval-when-compile (require 'time-date))
-(eval-when-compile (require 'cl-lib)) ;;OK, maybe CL isn't all bad
+(require 'cl-lib) ;;OK, maybe CL isn't all bad
 
 (defconst lbkmk-test-bookmarks-file "bookmarks-2014-04-25.json"
-  "A Firefox JSON export file for testing purposes")
+  "A Firefox JSON export file for testing purposes.")
+
 
 (defvar lbkmk-json-object
   (json-read-file lbkmk-test-bookmarks-file)
   "JSON object from Firefox export file.")
 
+
 ;; (prin1 lbkmk-json-object (get-buffer-create "*parsed-json*"))
 
 (defun lbkmk-get-output-buffer ()
-  "Returns the bookmark output buffer, if it exists."
+  "Return the bookmark output buffer, if it exists."
   (get-buffer "*web_bookmarks*"))
 
+
 (defun lbkmk-get-create-output-buffer ()
-  "Returns the bookmark output buffer, creating it if does not exist."
+  "Return the bookmark output buffer, creating it if does not exist."
   (get-buffer-create "*web_bookmarks*"))
 
+
 (defun lbkmk-clear-output-buffer () 
-  "Remove all previous output, if any"
+  "Remove all previous output, if any."
   (with-current-buffer (lbkmk-get-create-output-buffer)
     (delete-region (point-min) (point-max))))
 
+
 (lbkmk-clear-output-buffer)
 
+
 (defun lbkmk-convert-moz-time (time-value)
-  "Convert mozilla time value to standard emacs (HIGH LOW USEC PSEC)"
+  "Convert mozilla time TIME-VALUE to standard Emacs (HIGH LOW USEC PSEC)."
   (if time-value
       (seconds-to-time (/ time-value 1000000.0))
     nil))
 
+
 (defun lbkmk-format-moz-time-iso-8601 (time-value)
-  "Format time-value from mozilla JSON to ISO 8601 standard format, return as string"
+  "Format TIME-VALUE from mozilla JSON to ISO 8601 standard format, return as string."
   (if time-value
       (format-time-string "%FT%T%z"  (lbkmk-convert-moz-time time-value))
     ""))
 
+
 (defun lbkmk-fuzzy-float-str (any-float)
-  "Format a float as a date string if it would result in a
-reasonable value, as float otherwise"
+  "Format float ANY-FLOAT as a date string if it would result in a reasonable value, as float otherwise."
   ;;assume floating-point value is date if would convert to
   ;;later than 3/3/1973
   (if (and (> any-float  1.0e14)
@@ -83,35 +88,24 @@ reasonable value, as float otherwise"
       (lbkmk-format-moz-time-iso-8601 any-float)
     (number-to-string any-float)))
 
-(defun lbkmk-make-str (any-value)
-  "Format any-value into a string. (Surely there's a standard function for this?)"
-  (cond ((equal (type-of any-value) 'string)
-          any-value)
-        ((equal (type-of any-value) 'integer)
-         (number-to-string any-value))
-        ((equal (type-of any-value) 'float)
-         (lbkmk-fuzzy-float-str any-value))
-        ('t
-         "unknown type")))
 
 (defun lbkmk-output-str (a-string)
-  "Writes a single string or character to the output buffer."
+  "Write A-STRING to the output buffer."
   (with-current-buffer (lbkmk-get-create-output-buffer)
     (goto-char (point-max))
     (insert a-string)))
 
 (defun lbkmk-output-strs (&rest output-strings)
-  "Write a list of strings to the output buffer"
+  "Write list of strings OUTPUT-STRINGS to the output buffer."
   (with-current-buffer  (lbkmk-get-create-output-buffer)
     (goto-char (point-max))
     (mapc 'insert output-strings)))
 
-(defun lbkmk-output
-    (&rest output-values)
-  "Output text  by writing to my custom buffer"
+(defun lbkmk-output (&rest output-values)
+  "Output OUTPUT-VALUES as text by writing to my custom buffer."
   (apply 'lbkmk-output-strs
          (cl-remove-if 'null
-                       (mapcar 'lbkmk-make-str output-values))))
+                       (mapcar (lambda (x) (format "%s" x)) output-values))))
 
 ;; (defun lbkmk-handle-bookmark (bookmark)
 ;;   ;;bookmark is a dotted pair
@@ -144,7 +138,9 @@ reasonable value, as float otherwise"
 
 (cl-defstruct lbkmk-moz-place uri type lastModified dateAdded parent id title index)
 
+
 (defun lbkmk-make-lbkmk-moz-place-list (list-of-lists)
+  "Build and return a lbkmk-moz-place object from LIST-OF-LISTS."
   (let (url lastModified dateAdded parent id title index)
     (mapc (lambda (bkmk-assoc) (pcase (car bkmk-assoc)
                             (`title (setq title (cdr bkmk-assoc)))
@@ -158,9 +154,10 @@ reasonable value, as float otherwise"
                             (`_ (error "lbkmk-make-lbkmk-moz-place-list got alist with car of %s" (car bkmk-assoc)))
                             )) list-of-lists)))
 
-(assert (listp lbkmk-json-object))
-(assert (listp (cdr lbkmk-json-object)))
-(assert (listp (cddr lbkmk-json-object)))
+
+(cl-assert (listp lbkmk-json-object))
+(cl-assert (listp (cdr lbkmk-json-object)))
+(cl-assert (listp (cddr lbkmk-json-object)))
 (lbkmk-output (type-of lbkmk-json-object) (cddr lbkmk-json-object))
 ;; (lbkmk-make-lbkmk-moz-place-list (aref lbkmk-json-object 1))
 
@@ -205,11 +202,11 @@ reasonable value, as float otherwise"
 (cl-defstruct lbkmk-moz-root id dateAdded lastModified type root children)
 
 (defun lbkmk-make-moz-root-children-from-json (json-node)
-  "Currently a place-holder; process children of a moz-root node."
+  "Currently a place-holder; process children of JSON-NODE, a moz-root node instance."
   json-node)
 
 (defun lbkmk-make-moz-root-from-json (json-node)
-  "Given a parsed bookmark file, create the bookmark tree from root."
+  "Given a parsed bookmark file in JSON-NODE, create the bookmark tree from root."
   (make-lbkmk-moz-root :id (assoc-default 'id json-node)
                        :type  (assoc-default 'type json-node)
                        :lastModified  (lbkmk-convert-moz-time (assoc-default  'lastModified json-node))
@@ -223,3 +220,6 @@ reasonable value, as float otherwise"
 ;;; Parse json structure
 ;;; create buffer showing bookmarks
 ;;; save bookmarks in multiple formats
+
+(provide 'lib-bookmark)
+;;; lib-bookmark.el ends here
