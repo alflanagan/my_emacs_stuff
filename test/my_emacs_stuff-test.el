@@ -14,6 +14,7 @@
 (require 'test-secret-data)
 (require 'test-eieio)
 (require 'test-lib-bookmark)
+(require 'test-file-mode-exp)
 (ert t)
 
 (provide 'my_emacs_stuff-test)
