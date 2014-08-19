@@ -12,7 +12,7 @@
   (should (equal (assoc "fred" interpreter-mode-alist) nil))
   (file-mode-exp-set-interpreter-mode "fred" 'emacs-lisp-mode)
   (should (equal (assoc "fred" interpreter-mode-alist) '("fred" . emacs-lisp-mode)))
-  (setq interpreter-mode-alist 
+  (setq interpreter-mode-alist
         (delq (assoc "fred" interpreter-mode-alist) interpreter-mode-alist)))
 
 (ert-deftest test-change-list-entry ()
