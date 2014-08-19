@@ -67,7 +67,8 @@
   (should (equal (lbkmk-fuzzy-float-str 7.0) "7.0"))
   (should (or (equal (lbkmk-fuzzy-float-str  100000000000001.0) "1973-03-03T04:46:40-0500")
               (equal (lbkmk-fuzzy-float-str  100000000000001.0) "1973-03-03T09:46:40+0000" )))
-  (should (equal (lbkmk-fuzzy-float-str  2147449999999999.0) "2038-01-18T12:53:19-0500"))
+  (should (or (equal (lbkmk-fuzzy-float-str  2147449999999999.0) "2038-01-18T12:53:19-0500")
+              (equal (lbkmk-fuzzy-float-str  2147449999999999.0) "2038-01-18T17:53:19+0000")))
   (should (equal (lbkmk-fuzzy-float-str  2147450000000000.0) "2.14745e+15")))
 
 ;;; **** lbkmk-output-str ****
