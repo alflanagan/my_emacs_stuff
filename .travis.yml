@@ -1,11 +1,7 @@
 language: lisp
 emacs:
-- "24.1"
-- "24.2"
 - "24.3"
 env:
-- EVM_EMACS=emacs-24.1-bin
-- EVM_EMACS=emacs-24.2-bin
 - EVM_EMACS=emacs-24.3-bin
 install:
 - sudo mkdir /usr/local/evm
