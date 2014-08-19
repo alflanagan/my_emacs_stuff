@@ -42,10 +42,10 @@
   "Test `lbkmk-format-moz-time-iso-8601' assuming server is set to UTC time."
   (should (equal
            (lbkmk-format-moz-time-iso-8601 0.0)
-           "1970-01-01T00:00:00-0000"))
+           "1970-01-01T00:00:00+0000"))
   (should (equal
            (lbkmk-format-moz-time-iso-8601 (* 1000000  1399864605.1600919))
-           "2014-05-11T23:16:45-0400")))
+           "2014-05-12T03:16:45+0000")))
 
 (ert-deftest lbkmk-test-format-moz-time-iso-8601 ()
   "Unit tests for lbkmk-format-moz-time-iso-8601."
@@ -65,7 +65,8 @@
 (ert-deftest lbkmk-test-fuzzy-float-str ()
   "Unit tests for lbkmk-fuzzy-float-str."
   (should (equal (lbkmk-fuzzy-float-str 7.0) "7.0"))
-  (should (equal (lbkmk-fuzzy-float-str  100000000000001.0) "1973-03-03T04:46:40-0500"))
+  (should (or (equal (lbkmk-fuzzy-float-str  100000000000001.0) "1973-03-03T04:46:40-0500")
+              (equal (lbkmk-fuzzy-float-str  100000000000001.0) "1973-03-03T09:46:40+0000" )))
   (should (equal (lbkmk-fuzzy-float-str  2147449999999999.0) "2038-01-18T12:53:19-0500"))
   (should (equal (lbkmk-fuzzy-float-str  2147450000000000.0) "2.14745e+15")))
 
