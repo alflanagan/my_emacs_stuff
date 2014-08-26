@@ -139,6 +139,11 @@
        'paredit-backward-delete
        'paredit-close-round)))
 
+(defun set-up-mark-modes ()
+  "Set up larger mark rings, allow C-SPC SPC to keep popping mark."
+  (setq mark-ring-max 32)
+  (setq set-mark-command-repeat-pop t))
+
 (defun set-up-js2-mode ()
   "Tell Emacs to use `js2-mode' for files with interpreter \"node\".
 
@@ -184,7 +189,7 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
                              (cdr err-data)
                              (car ',body)))))
 
-(defun set-up-packages ()
+(defun set-up-everything ()
   "Does various setup and initialization operations."
   (error-into-message (start-server-if-none))
   (error-into-message (set-up-rst-auto-complete))
@@ -194,8 +199,9 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
   (error-into-message (set-up-easy-kill))
   (error-into-message (set-up-eldoc))
   (error-into-message (set-up-js2-mode))
-  (error-into-message (set-up-web-beautify)))
+  (error-into-message (set-up-web-beautify))
+  (error-into-message (set-up-mark-modes)))
 
-(add-hook 'after-init-hook 'set-up-packages)
+(add-hook 'after-init-hook 'set-up-everything)
 
 ;;; init.el ends here
