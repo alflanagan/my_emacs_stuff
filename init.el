@@ -79,7 +79,8 @@
   ;;  (add-hook 'emacs-lisp-mode-hook 'setup-elisp-prettify)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'pretty-symbols-mode)
   (add-hook-if-exists 'emacs-lisp-mode-hook 'ipretty-mode)
-  (add-hook-if-exists 'js2-mode-hook 'pretty-symbols-mode))
+  (add-hook-if-exists 'js2-mode-hook 'pretty-symbols-mode)
+  (add-hook-if-exists 'js2-mode-hook 'electric-pair-mode))
 
 (add-hook 'after-init-hook 'add-hooks-for-packages)
 
