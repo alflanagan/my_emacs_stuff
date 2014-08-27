@@ -12,7 +12,7 @@
 (depends-on "drag-stuff")
 (depends-on "easy-kill")
 (depends-on "ecb")
-(depends-on "el-macro")
+(depends-on "elmacro")
 (depends-on "elpy")
 (depends-on "ert-runner")
 (depends-on "exec-path-from-shell")
