@@ -32,9 +32,10 @@
 (depends-on "nyan-mode")
 ;;problem with pallet: it doesn't distinguish wanted packages from
 ;;those installed as dependencies. Need smarter dependency handling.
-(depends-on "pallet")
+;;(depends-on "pallet")
 (depends-on "paradox")
 ;;(depends-on "plsql")
+(depends-on "pony-mode")
 (depends-on "popwin")
 (depends-on "pretty-symbols")
 (depends-on "prodigy")
