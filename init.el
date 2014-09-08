@@ -1,5 +1,4 @@
-;;; init.el -- Non-site-specific initialization - * - lexical-binding: t -*-
-;; lexical bind causes problems with add-hook??
+;;; init.el -- Non-site-specific initialization -*- coding:utf-8; lexical-binding:t; -*-
 ;; Copyright © 2014, A. Lloyd Flanagan
 
 ;; Author: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
@@ -33,7 +32,6 @@
 (require 'secret-data)
 (require 'file-mode-exp)
 
-
 (when (and (require 'cask "~/.cask/cask.el" t)
            ; should we initialize even without Cask?
            (file-exists-p  (expand-file-name "Cask" user-emacs-directory)))
@@ -41,14 +39,17 @@
   (cask-initialize))
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
-   "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
+   "Add to hook A-HOOK a call to (A-FUNCTION ARGS) with a check to ensure A-FUNCTION is defined."
    `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
                                 (funcall ,a-function ,@args)))))
 
-;; (defmacro add-hook-if-exists (a-hook a-function &rest args)
-;;   `(add-hook ,a-hook 'wilma))
-
-;; (macroexpand  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
+;; (macroexpand  '(add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode 1 2 3))
+;; ==>
+;; (add-hook
+;;  'js2-mode-hook 
+;;  (lambda ()
+;;    (if (functionp 'prettify-symbols-mode)
+;;        (funcall 'prettify-symbols-mode 1 2 3))))
 
 (defun setup-elisp-pretty ()
   "Add to words auto-converted to unicode symbols."
@@ -206,3 +207,7 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
 (add-hook 'after-init-hook 'set-up-everything)
 
 ;;; init.el ends here
+
+;; Local Variables:
+;; indent-tabs-mode: nil
+;; End:
