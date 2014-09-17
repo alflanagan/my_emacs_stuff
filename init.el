@@ -147,21 +147,17 @@
   (setq set-mark-command-repeat-pop t))
 
 (defun set-up-js2-mode ()
-  "Tell Emacs to use `js2-mode' for files with interpreter \"node\".
-
-If `js2-mode' is not found, falls back to `javascript-mode'."
+  "Tell Emacs to use `js2-mode' for files with javascript interpreters."
   (if (functionp 'js2-mode)
-      (progn 
-        (file-mode-exp-set-interpreter-mode "node" 'js2-mode)
-        (file-mode-exp-set-interpreter-mode "nodejs" 'js2-mode)
+      (let ((interp-list '("node" "nodejs" "gjs" "rhino")))
+        (mapc (lambda (interp-name)
+                (file-mode-exp-set-interpreter-mode (purecopy interp-name) 'js2-mode))
+              interp-list)
         ;; and while we're at it, set up file extension
+        ;; all the existing associations use 'javascript-mode instead
+        ;; of the equivalent 'js-mode
         (while (rassoc 'javascript-mode auto-mode-alist)
-          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode))
-        ;;(add-hook 'js2-mode-hook ')
-        )
-    ;; at least set up node interpreter anyway
-    (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)
-    (file-mode-exp-set-interpreter-mode "nodejs" 'javascript-mode)))
+          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode)))))
 
 (defun set-up-web-beautify ()
   "Set up keys to invoke web-beautify in appropriate modes."
