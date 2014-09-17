@@ -43,12 +43,39 @@
   (json-read-file lbkmk-test-bookmarks-file)
   "JSON object from Firefox export file.")
 
+(defconst lbkmk-test-chrome-bkmk-file "gchrome_bookmarks_9_17_14.html"
+  "A Google Chrome export to Netscape HTML format.")
 
-;; (prin1 lbkmk-json-object (get-buffer-create "*parsed-json*"))
+(defvar lbkmk-test-chrome-object
+  (with-temp-buffer
+    (insert-file-contents lbkmk-test-chrome-bkmk-file )
+    (libxml-parse-html-region (point-min) (point-max)))
+  "Parse tree from test file in `lbkmk-test-chrome-bkmk-file'.")
 
-(defun lbkmk-get-output-buffer ()
-  "Return the bookmark output buffer, if it exists."
-  (get-buffer "*web_bookmarks*"))
+(defun process-kids (parse-node)
+  "Look at child nodes of PARSE-NODE and return bookmark/folder structure."
+  (mapcar (lambda (a-node)
+            (cl-case (car a-node)
+              ('(nil "head") nil)
+              (t (car a-node) )))
+          (cdr parse-node)))
+
+((defun process-chrome-parse-tree (parse-tree)
+   "Read parse tree PARSE-TREE and extract bookmark structure."
+   (let ((html-tree (car (cdr (cdr (cdr parse-tree))))))
+     (cl-assert (string-equal (car html-tree) "html"))
+     (cdr (cdr (cdr html-tree)))
+     ;;(mapcar (lambda (a) a) (cdr (cdr (cdr html-tree))))
+     ;;(mapcar 'process-kids html-tree)
+     ))
+
+ (length (nth 3 (nth 3 lbkmk-test-chrome-object)))
+ (nth 3 (cdr (car (process-chrome-parse-tree lbkmk-test-chrome-object))))
+ ;; (prin1 lbkmk-json-object (get-buffer-create "*parsed-json*"))
+
+ (defun lbkmk-get-output-buffer ()
+   "Return the bookmark output buffer, if it exists."
+   (get-buffer "*web_bookmarks*")))
 
 
 (defun lbkmk-get-create-output-buffer ()
