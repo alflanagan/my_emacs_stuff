@@ -30,15 +30,16 @@
 ;; ensure that packages are setup before they're called.
 
 ;;; Code:
-(require 'secret-data)
-(require 'file-mode-exp)
-
-
+;; set up cask *before* other requires
 (when (and (require 'cask "~/.cask/cask.el" t)
            ; should we initialize even without Cask?
            (file-exists-p  (expand-file-name "Cask" user-emacs-directory)))
   (declare-function cask-initialize "cask" (&optional project-path))
   (cask-initialize))
+
+(require 'secret-data)
+(require 'file-mode-exp)
+(require 'quack)
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
    "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
