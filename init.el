@@ -1,5 +1,4 @@
-;;; init.el -- Non-site-specific initialization - * - lexical-binding: t -*-
-;; lexical bind causes problems with add-hook??
+;;; init.el -- Non-site-specific initialization -*- coding:utf-8; lexical-binding:t; -*-
 ;; Copyright © 2014, A. Lloyd Flanagan
 
 ;; Author: A. Lloyd Flanagan <a.lloyd.flanagan@gmail.com>
@@ -30,6 +29,7 @@
 ;; ensure that packages are setup before they're called.
 
 ;;; Code:
+
 ;; set up cask *before* other requires
 (when (and (require 'cask "~/.cask/cask.el" t)
            ; should we initialize even without Cask?
@@ -42,14 +42,17 @@
 (require 'quack)
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
-   "Add to hook A-HOOK an expression to call A-FUNCTION with arguments ARGS only if A-FUNCTION is a defined function when the hook is run."
+   "Add to hook A-HOOK a call to (A-FUNCTION ARGS) with a check to ensure A-FUNCTION is defined."
    `(add-hook ,a-hook (lambda () (if (functionp ,a-function)
                                 (funcall ,a-function ,@args)))))
 
-;; (defmacro add-hook-if-exists (a-hook a-function &rest args)
-;;   `(add-hook ,a-hook 'wilma))
-
-;; (macroexpand  (add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode))
+;; (macroexpand  '(add-hook-if-exists 'js2-mode-hook 'prettify-symbols-mode 1 2 3))
+;; ==>
+;; (add-hook
+;;  'js2-mode-hook 
+;;  (lambda ()
+;;    (if (functionp 'prettify-symbols-mode)
+;;        (funcall 'prettify-symbols-mode 1 2 3))))
 
 (defun setup-elisp-pretty ()
   "Add to words auto-converted to unicode symbols."
@@ -147,21 +150,17 @@
   (setq set-mark-command-repeat-pop t))
 
 (defun set-up-js2-mode ()
-  "Tell Emacs to use `js2-mode' for files with interpreter \"node\".
-
-If `js2-mode' is not found, falls back to `javascript-mode'."
+  "Tell Emacs to use `js2-mode' for files with javascript interpreters."
   (if (functionp 'js2-mode)
-      (progn 
-        (file-mode-exp-set-interpreter-mode "node" 'js2-mode)
-        (file-mode-exp-set-interpreter-mode "nodejs" 'js2-mode)
+      (let ((interp-list '("node" "nodejs" "gjs" "rhino")))
+        (mapc (lambda (interp-name)
+                (file-mode-exp-set-interpreter-mode (purecopy interp-name) 'js2-mode))
+              interp-list)
         ;; and while we're at it, set up file extension
+        ;; all the existing associations use 'javascript-mode instead
+        ;; of the equivalent 'js-mode
         (while (rassoc 'javascript-mode auto-mode-alist)
-          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode))
-        ;;(add-hook 'js2-mode-hook ')
-        )
-    ;; at least set up node interpreter anyway
-    (file-mode-exp-set-interpreter-mode "node" 'javascript-mode)
-    (file-mode-exp-set-interpreter-mode "nodejs" 'javascript-mode)))
+          (setf (cdr (rassoc 'javascript-mode auto-mode-alist)) 'js2-mode)))))
 
 (defun set-up-web-beautify ()
   "Set up keys to invoke web-beautify in appropriate modes."
@@ -207,3 +206,7 @@ If `js2-mode' is not found, falls back to `javascript-mode'."
 (add-hook 'after-init-hook 'set-up-everything)
 
 ;;; init.el ends here
+
+;; Local Variables:
+;; indent-tabs-mode: nil
+;; End:

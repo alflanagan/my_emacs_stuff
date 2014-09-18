@@ -30,9 +30,12 @@
 (depends-on "markdown-mode")
 (depends-on "multiple-cursors")
 (depends-on "nyan-mode")
-(depends-on "pallet")
+;;problem with pallet: it doesn't distinguish wanted packages from
+;;those installed as dependencies. Need smarter dependency handling.
+;;(depends-on "pallet")
 (depends-on "paradox")
 ;;(depends-on "plsql")
+(depends-on "pony-mode")
 (depends-on "popwin")
 (depends-on "pretty-symbols")
 (depends-on "prodigy")
@@ -48,7 +51,6 @@
 (depends-on "starter-kit-eshell")
 (depends-on "starter-kit-js")
 (depends-on "starter-kit-lisp")
-(depends-on "tabulated-list")
 (depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "web-beautify")
