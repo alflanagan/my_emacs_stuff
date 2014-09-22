@@ -31,15 +31,20 @@
 ;;; Code:
 
 ;; set up cask *before* other requires
-(when (and (require 'cask "~/.cask/cask.el" t)
-           ; should we initialize even without Cask?
-           (file-exists-p  (expand-file-name "Cask" user-emacs-directory)))
-  (declare-function cask-initialize "cask" (&optional project-path))
-  (cask-initialize))
+(when (and (file-exists-p  (expand-file-name "Cask" user-emacs-directory))
+           (not (equal system-type "windows-nt"))
+           (require 'cask "~/.cask/cask.el" t))
+    (declare-function cask-initialize "cask" (&optional project-path))
+    (cask-initialize))
+
+;; html-mode fails on windows if sgml-mode not already present
+(when (equal system-type 'windows-nt)
+  ;; we could do this in hook, etc. but wth...
+  (require 'sgml-mode))
 
 (require 'secret-data)
 (require 'file-mode-exp)
-(require 'quack)
+(require 'quack nil t)
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
    "Add to hook A-HOOK a call to (A-FUNCTION ARGS) with a check to ensure A-FUNCTION is defined."
