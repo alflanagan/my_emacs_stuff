@@ -201,7 +201,8 @@
   (error-into-message (set-up-eldoc))
   (error-into-message (set-up-js2-mode))
   (error-into-message (set-up-web-beautify))
-  (error-into-message (set-up-mark-modes)))
+  (error-into-message (set-up-mark-modes))
+  (cua-mode))
 
 (add-hook 'after-init-hook 'set-up-everything)
 
