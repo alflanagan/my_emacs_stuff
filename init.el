@@ -32,7 +32,7 @@
 
 ;; set up cask *before* other requires
 (when (and (file-exists-p  (expand-file-name "Cask" user-emacs-directory))
-           (not (equal system-type "windows-nt"))
+           ;; (not (equal system-type "windows-nt"))
            (require 'cask "~/.cask/cask.el" t))
     (declare-function cask-initialize "cask" (&optional project-path))
     (cask-initialize))
