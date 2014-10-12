@@ -10,9 +10,11 @@
 ;;(depends-on "codesearch")
 (depends-on "coffee-fof")
 (depends-on "coffee-mode")
-(depends-on "dash")
+(depends-on "creole") ;; for emacswiki
+(depends-on "creole-mode")
+(depends-on "dash") ;; esential functional programming lib
 (depends-on "drag-stuff")
-(depends-on "e2wm")
+(depends-on "e2wm")  ;; emacs window manager -- somewhat experimental
 (depends-on "e2wm-bookmark")
 (depends-on "e2wm-direx")
 (depends-on "easy-kill")
@@ -22,7 +24,7 @@
 (depends-on "ert-runner")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
-(depends-on "f")
+(depends-on "f")  ;; file system utilities
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
 ;;(depends-on "git-timemachine")
@@ -31,6 +33,7 @@
 (depends-on "ipretty")
 (depends-on "js2-mode")
 (depends-on "json-mode")
+(depends-on "kv") ;; should be specified by pinboard, but isn't
 (depends-on "literate-coffee-mode")
 (depends-on "magit")
 (depends-on "markdown-mode")
@@ -39,14 +42,15 @@
 ;;problem with pallet: it doesn't distinguish wanted packages from
 ;;those installed as dependencies. Need smarter dependency handling.
 ;;(depends-on "pallet")
-(depends-on "paradox")
+(depends-on "paradox") ;; enhanced package listing, future std.
 ;; (depends-on "php-eldoc")
 ;; (depends-on "php-extras")
 ;; (depends-on "php-mode")
 ;; (depends-on "php-refactor-mode")
+(depends-on "pinboard") ;; display pinboard entries in buffer
 (depends-on "pinboard-api")
 ;;(depends-on "plsql")
-(depends-on "pony-mode")
+(depends-on "pony-mode") ;; django-admin interaction (nice)
 (depends-on "popwin")
 (depends-on "pretty-symbols")
 (depends-on "prodigy")
@@ -66,6 +70,7 @@
 (depends-on "starter-kit-lisp")
 (depends-on "undo-tree")
 (depends-on "use-package")
+(depends-on "web")
 (depends-on "web-beautify")
 (depends-on "web-mode")
 (depends-on "yasnippet")
