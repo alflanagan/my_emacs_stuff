@@ -3,8 +3,8 @@ env:
 - EVM_EMACS=emacs-24.3-bin
 - EVM_EMACS=emacs-git-snapshot
 before_install:
-- sudo apt-get texinfo
-- sudo apt-get libxml2-devel
+- sudo apt-get install texinfo
+- sudo apt-get install libxml2-devel
 install:
 - sudo mkdir /usr/local/evm
 - sudo chown $(id -u):$(id -g) /usr/local/evm
