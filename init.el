@@ -45,6 +45,7 @@
 (require 'secret-data)
 (require 'file-mode-exp)
 (require 'quack nil t)
+(require 'kv) ;; hidden requirement of pinboard
 
 (defmacro add-hook-if-exists (a-hook a-function &rest args)
    "Add to hook A-HOOK a call to (A-FUNCTION ARGS) with a check to ensure A-FUNCTION is defined."
