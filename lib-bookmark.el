@@ -60,7 +60,7 @@
               (t (car a-node) )))
           (cdr parse-node)))
 
-((defun process-chrome-parse-tree (parse-tree)
+(defun process-chrome-parse-tree (parse-tree)
    "Read parse tree PARSE-TREE and extract bookmark structure."
    (let ((html-tree (car (cdr (cdr (cdr parse-tree))))))
      (cl-assert (string-equal (car html-tree) "html"))
@@ -69,13 +69,13 @@
      ;;(mapcar 'process-kids html-tree)
      ))
 
- (length (nth 3 (nth 3 lbkmk-test-chrome-object)))
- (nth 3 (cdr (car (process-chrome-parse-tree lbkmk-test-chrome-object))))
+;;(length (nth 3 (nth 3 lbkmk-test-chrome-object)))
+;;(nth 3 (cdr (car (process-chrome-parse-tree lbkmk-test-chrome-object))))
  ;; (prin1 lbkmk-json-object (get-buffer-create "*parsed-json*"))
 
- (defun lbkmk-get-output-buffer ()
-   "Return the bookmark output buffer, if it exists."
-   (get-buffer "*web_bookmarks*")))
+(defun lbkmk-get-output-buffer ()
+  "Return the bookmark output buffer, if it exists."
+  (get-buffer "*web_bookmarks*"))
 
 
 (defun lbkmk-get-create-output-buffer ()
@@ -173,12 +173,12 @@
                             (`title (setq title (cdr bkmk-assoc)))
                             (`uri (setq url (cdr bkmk-assoc)))
                             (`type (if (not (equal (cdr bkmk-assoc) "text/x-moz-place"))
-                                       (error "lbkmk-make-lbkmk-moz-place-list got record of type %s" (cdr bkmk-assoc))))
+                                       (error "Function lbkmk-make-lbkmk-moz-place-list got record of type %s" (cdr bkmk-assoc))))
                             (`parent (setq parent (cdr bkmk-assoc)))
                             (`id (setq id (cdr bkmk-assoc)))
                             (`dateAdded (setq dateAdded (cdr bkmk-assoc)))
                             (`lastModified (setq lastModified (cdr bkmk-assoc)))
-                            (`_ (error "lbkmk-make-lbkmk-moz-place-list got alist with car of %s" (car bkmk-assoc)))
+                            (`_ (error "Function lbkmk-make-lbkmk-moz-place-list got alist with car of %s" (car bkmk-assoc)))
                             )) list-of-lists)))
 
 
@@ -209,7 +209,7 @@
 ;;  (uri . "https://www.google.com/webfonts"))
 
 (defun lbkmk-make-moz-place-from-json (json-node)
-  "Given a parsed JSON representation of a web bookmark, returns a lbkmk-moz-place structure."
+  "Convert a parsed bookmark in JSON-NODE to lbkmk-moz-place structure."
   (make-lbkmk-moz-place :uri  (assoc-default 'uri json-node)
                         :type  (assoc-default 'type json-node)
                         :lastModified  (lbkmk-convert-moz-time (assoc-default  'lastModified json-node))
