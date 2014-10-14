@@ -1,6 +1,7 @@
 language: ruby
 env:
-- EVM_EMACS=emacs-24.3-bin
+# compiled binary lacks libxml2 integration
+# - EVM_EMACS=emacs-24.3-bin
 - EVM_EMACS=emacs-git-snapshot
 before_install:
 - sudo apt-get install texinfo
