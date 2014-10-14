@@ -2,6 +2,9 @@ language: ruby
 env:
 - EVM_EMACS=emacs-24.3-bin
 - EVM_EMACS=emacs-git-snapshot
+before_install:
+- sudo apt-get makeinfo
+- sudo apt-get libxml-devel
 install:
 - sudo mkdir /usr/local/evm
 - sudo chown $(id -u):$(id -g) /usr/local/evm
