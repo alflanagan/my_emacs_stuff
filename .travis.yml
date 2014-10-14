@@ -5,6 +5,8 @@ env:
 before_install:
 - sudo apt-get install texinfo
 - sudo apt-get install libxml2-dev
+- sudo apt-get install libxpm-dev
+- sudo apt-get install libgif-dev
 install:
 - sudo mkdir /usr/local/evm
 - sudo chown $(id -u):$(id -g) /usr/local/evm
@@ -12,6 +14,8 @@ install:
 - curl -fsSkL https://raw.github.com/rejeep/evm/master/go | bash
 - export PATH="$HOME/.evm/bin:$PATH"
 - evm install $EVM_EMACS --use
+- which emacs
+- emacs --version
 - curl -fsSkL https://raw.github.com/cask/cask/master/go | python
 - export PATH="$HOME/.cask/bin:$PATH"
 - cask
