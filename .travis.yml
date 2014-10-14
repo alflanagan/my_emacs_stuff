@@ -9,6 +9,7 @@ before_install:
 - sudo apt-get install libxpm-dev
 - sudo apt-get install libgif-dev
 install:
+- cat /proc/version
 - sudo mkdir /usr/local/evm
 - sudo chown $(id -u):$(id -g) /usr/local/evm
 - curl -fsSkL https://raw.github.com/rejeep/evm/master/go
