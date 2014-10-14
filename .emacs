@@ -14,7 +14,10 @@
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa" . "http://melpa.milkbox.net/packages/")))))
+     ("melpa" . "http://melpa.milkbox.net/packages/"))))
+ '(pinboard-url
+   "http://feeds.pinboard.in/json/u:a.lloyd.flanagan/?count=10")
+ '(quack-default-program "guile"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -37,6 +40,9 @@
   (if init-file
       (load-file init-file)
     (message "[init] skipped loading init.el, file not found.")))
+
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 (provide '.emacs)
 
