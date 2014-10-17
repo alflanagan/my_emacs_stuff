@@ -1,0 +1,17 @@
+** Windows-specific setup
+  :PROPERTIES:
+  :CUSTOM_ID: windows-specific
+  :END:
+
+#+name: starter-kit-load-on-startup
+#+begin_src emacs-lisp
+;; html-mode fails on windows if sgml-mode not already present
+(when (equal system-type 'windows-nt)
+  ;; we could do this in hook, etc. but wth...
+  (require 'sgml-mode))
+
+(require 'secret-data)
+(require 'file-mode-exp)
+(require 'quack nil t)
+(require 'kv) ;; hidden requirement of pinboard
+#+end_src
