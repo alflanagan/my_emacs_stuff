@@ -6,8 +6,9 @@
 
 ;;; Code:
 
-(require 'cl-lib)
-
+(defun caddr (x)
+  "Return the car of the cdr of the cdr of X."
+  (cadr (cdr x)))
 
 (defsubst string-join (strings &optional separator)
   "Join all STRINGS using SEPARATOR."
@@ -66,7 +67,7 @@
           (cadr (assoc some-key (secret-data-parse)))
           )
       (file-error (message "Can't get secret data with key [%s]: can't open file %s: (%s)."
-                           some-key fname (cl-caddr err-data))))))
+                           some-key fname (caddr err-data))))))
 
 
 (defun secret-data-write-data-to-file (a-list file-name)
@@ -77,7 +78,7 @@
         (save-buffer)
         (kill-buffer))
     (file-error (message "Failed writing data to file [%s]: (%s)."
-                         file-name (cl-caddr err-data)))))
+                         file-name (caddr err-data)))))
 
 
 (defun replace-file-with-back (source-file replace-file)
@@ -102,7 +103,7 @@
               (secret-data-write-data-to-file read-a-list new-file-name)
               (replace-file-with-back new-file-name file-name))))
       (file-error (message "Failed writing value to key [%s]: can't open file %s: (%s)."
-                           some-key fname (cl-caddr err-data))))))
+                           some-key fname (caddr err-data))))))
 
 (provide 'secret-data)
 ;;; secret-data.el ends here
