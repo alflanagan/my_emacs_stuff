@@ -2,9 +2,11 @@
 my_emacs_stuff
 ==============
 
-*Important Note*
-The emacs iniitialization which is in this project is now officially obsolete;
-it's being moved to the emacs24-starter-kit repository.
+Important Note
+--------------
+
+    The emacs iniitialization which is in this project is now officially obsolete;
+    it's being moved to the emacs24-starter-kit repository.
 
 Various emacs initialization and program files, of interest mostly to me.
 
