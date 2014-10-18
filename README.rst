@@ -5,7 +5,7 @@ my_emacs_stuff
 Important Note
 --------------
 
-    The emacs iniitialization which is in this project is now
+    The emacs initialization which is in this project is now
     officially obsolete; it's being moved to the emacs24-starter-kit_
     repository.
 
@@ -13,7 +13,7 @@ Important Note
 
 Various Emacs program files, of interest mostly to me.
 
-I've set up some customization options in file I can share across the
+I've set up some customization options in files I can share across the
 multiple systems where I run Emacs, as well as a file to use Cask to
 manage installed packages.
 
