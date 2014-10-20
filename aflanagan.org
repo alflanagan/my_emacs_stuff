@@ -8,6 +8,7 @@
 ;; html-mode fails on windows if sgml-mode not already present
 (when (equal system-type 'windows-nt)
   ;; we could do this in hook, etc. but wth...
+  (starter-kit-install-if-needed 'sgml-mode)
   (require 'sgml-mode))
 #+end_src
 
@@ -15,16 +16,10 @@
 
 #+name: personal-requires
 #+begin_src emacs-lisp
+(starter-kit-install-if-needed 'quack 'kv 'web)
 (require 'quack nil t)
 (require 'kv) ;; hidden requirement of pinboard
+(starter-kit-install-if-needed 'pinboard 'pinboard-api)
 (require 'pinboard)
 #+end_src
 
-** Possible site-specific setup
-
-Might move this elsewhere.
-
-#+name: site-specific-setup
-#+begin_src emacs-lisp
-(set-frame-size (selected-frame) 132 45)
-#+end_src
