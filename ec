@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-#if [[ $# -gt 0 ]]; then  #emacsclient requires file to visit
-if [[ -S /tmp/emacs*/server ]]; then
-    if [[ $# -gt 0 ]]; then
+if [[ -S /tmp/emacs$(id -u)/server ]]; then
+    if [[ $# -eq 0 ]]; then
+        #TODO: move emacs to front
         echo emacs is already running.
     else
         emacsclient -n "$@" > ~/log/emacsclient.log 2>&1 &
