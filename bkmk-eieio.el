@@ -20,11 +20,6 @@
 
 ;;; Commentary:
 ;;
-
-
-;;; Code:
-;;
-
 ;; A bookmark file has (at least) 5 types of records, differentiated
 ;; by the "type" field. The known types are:
 
@@ -42,7 +37,51 @@
 ;; "annotations"??
 
 
-;;; Class bkmk-bookmark -- represent an x-moz-place
+;;; Code:
+;;
+
+(require 'eieio)
+
+
+
+(defun bkmk-convert-moz-time (time-value)
+  "Convert mozilla time TIME-VALUE to standard Emacs (HIGH LOW USEC PSEC)."
+  (if time-value
+      (seconds-to-time (/ time-value 1000000.0))
+    nil))
+
+;;; Class bkmk-container -- represent an x-moz-place-container
+;; "type": "text\/x-moz-place-container",
+;; "parent": 2,
+;; "id": 3676,
+;; "title": "Bookmarks Toolbar",
+;; "index": 3
+
+(defclass bkmk-container ()
+  ((id :initarg :id
+       :documentation
+       "")
+   (parent :initarg :parent
+           :documentation
+           "")
+   (index :initarg :index
+          :initform 0
+          :type integer
+          :documentation
+          "")
+   (title :initarg :title
+          :initform "" ;; not sure empty title is legal
+          :type string
+          :documentation
+          "")
+   (children :initarg :children
+             :type list
+             :documentation
+             "")
+   )
+  "A container for bookmarks.")
+
+;;; Class bkmk-place -- represent an x-moz-place
 
 ;; "uri": "http:\/\/retailmerchants.com\/member_search\/admin\/default.aspx",
 ;; "type": "text\/x-moz-place",
@@ -52,41 +91,60 @@
 ;; "id": 4173,
 ;; "title": "retailmerchants admin",
 ;; "index": 1
-(defclass bkmk-bookmark ()
+(defclass bkmk-place ()
   ((id :initarg :id
-       :initform nil
-       :type list
+       :type integer
        :documentation
-       "")
+       "A unique identifier for this `bkmk-place' in a `bkmk-container' heirarchy.")
    (uri :initarg :uri
-        :initform nil
-        :type list
+        :type string
         :documentation
         "The target of this bookmark, a standard URL.")
-   (lastModified :initarg :lastModified
-                 :initform nil
-                 :type list
-                 :documentation
-                 "")
-   (dateAdded :initarg :dateAdded
-              :initform nil
-              :type list
-              :documentation
-              "")
+   (last-modified :initarg :last-modified
+                  ;; TODO -- write validator for date values
+                  :type list
+                  :initform (0 0 0 0)
+                  :documentation
+                  "The date/time at which the bookmark was last modified, in standard Emacs lisp format (see `current-time').")
+   (date-added :initarg :date-added
+               :initform (0 0 0 0)
+               :type list
+               :documentation
+               "The date/time at which the bookmark was created, in standard Emacs lisp format (see `current-time').")
    (parent :initarg :parent
+           :type bkmk-container
            :initform nil
-           :type list
            :documentation
-           "")
+           "The parent record for this bookmark.")
    (title :initarg :title
-          :initform nil
-          :type list
+          :initform ""
+          :type string
           :documentation
           "Short description of place, shows in menu.")
-   (index :initarg "0"
-          :initform nil
-          :type 
+   (index :initarg :index
+          :initform 0
+          :type integer
           :documentation
           "Orders places within a container.")
    )
-  "Class bkmk-bookmark ")
+  "Class bkmk-place")
+
+(defmethod bkmk-format-date-added ((a-bkmk bkmk-place) format-string)
+  "Retrun string with date-added field of A-BKMK formatted according to FORMAT-STRING. See `format-time-string' for format specifications."
+  (if (slot-value a-bkmk :date-added)
+      (format-time-string format-string (slot-value a-bkmk :date-added))
+    ""))
+
+(defclass bkmk-separator ()
+  ((parent :initarg :parent
+           :type integer
+           :documentation
+           "")
+   (index initarg :index
+          :type integer
+          :documentation
+          ""))
+  "A useful placeholder for a menu separator.")
+
+(provide 'bkmk-eieio)
+;;; bkmk-eieio.el ends here
