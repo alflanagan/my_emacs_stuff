@@ -1,4 +1,4 @@
-;;; ert-bkmk-eieio.el --- ERT tests for bkmk-eieio objects
+;;; ert-bkmk-eieio.el --- ERT tests for bkmk-eieio objects  -*- lexical-binding: t; coding: utf-8; -*-
 ;;
 ;; Copyright (C) 2014 Adrian Lloyd Flanagan
 ;;
@@ -18,20 +18,20 @@
 ;; along with this program.  If not, see http://www.gnu.org/licenses/.
 
 (require 'ert)
-(require 'bkmk-eieio "/home/aflanagan/Devel/my_emacs_stuff/bkmk-eieio.el")
+(require 'bkmk-eieio)
 
 
 (ert-deftest test-bkmk-place-constructor ()
   "Test construction of a bkmk-place object."
-  (let (( test1 (bkmk-place "test1" :id 1 :parent 0 :uri "http:\/\/updates.enginehosting.com\/"
+  (let* ((container1 (bkmk-container "container1" :id 0 :title "root"))
+         (test1 (bkmk-place "test1" :id 1 :parent container1 :uri "http:\/\/updates.enginehosting.com\/"
                             :date-added (bkmk-convert-moz-time 1352820536000000)
                             :title "Enginehosting.com Status")))
     (should (= (slot-value test1 :id) 1))
     (should (equal (slot-value test1 :uri) "http:\/\/updates.enginehosting.com\/"))
-    (should (= (oref test1 parent) 0))
-    (should (equal (oref test1 date-added) '(20642 26424 0 0)))
-    (should (equal (bkmk-format-date-added test1 "%m%d%Y%H%M%S") "11132012102856"))
-    ))
+    (should (eq (slot-value test1 :parent) container1))
+    (should (equal (slot-value test1 :date-added) '(20642 26424 0 0)))
+    (should (equal (bkmk-format-date-added test1 "%m%d%Y%H%M%S") "11132012102856"))))
 
 (ert-deftest test-bkmk-place-format-date-added ()
   "Test the `bkmk-format-date-added' method for `bkmk-place' objects."

@@ -50,18 +50,25 @@
       (seconds-to-time (/ time-value 1000000.0))
     nil))
 
+
+(defgeneric bkmk-validate-obj (bkmk-obj)
+  "A method to verify class invariants not otherwise enforced.")
+
 ;;; Class bkmk-container -- represent an x-moz-place-container
 ;; "type": "text\/x-moz-place-container",
 ;; "parent": 2,
 ;; "id": 3676,
 ;; "title": "Bookmarks Toolbar",
 ;; "index": 3
+
 
 (defclass bkmk-container ()
   ((id :initarg :id
+       :type integer
        :documentation
        "")
    (parent :initarg :parent
+           :initform nil
            :documentation
            "")
    (index :initarg :index
@@ -76,11 +83,13 @@
           "")
    (children :initarg :children
              :type list
+             :initform ()
              :documentation
              "")
    )
   "A container for bookmarks.")
 
+
 ;;; Class bkmk-place -- represent an x-moz-place
 
 ;; "uri": "http:\/\/retailmerchants.com\/member_search\/admin\/default.aspx",
@@ -113,7 +122,6 @@
                "The date/time at which the bookmark was created, in standard Emacs lisp format (see `current-time').")
    (parent :initarg :parent
            :type bkmk-container
-           :initform nil
            :documentation
            "The parent record for this bookmark.")
    (title :initarg :title
@@ -130,14 +138,16 @@
   "Class bkmk-place")
 
 (defmethod bkmk-format-date-added ((a-bkmk bkmk-place) format-string)
-  "Retrun string with date-added field of A-BKMK formatted according to FORMAT-STRING. See `format-time-string' for format specifications."
+  "Return string with date-added field of A-BKMK formatted according to FORMAT-STRING. See `format-time-string' for format specifications."
   (if (slot-value a-bkmk :date-added)
       (format-time-string format-string (slot-value a-bkmk :date-added))
     ""))
 
+
+
 (defclass bkmk-separator ()
   ((parent :initarg :parent
-           :type integer
+           :type bkmk-container
            :documentation
            "")
    (index initarg :index
@@ -145,6 +155,11 @@
           :documentation
           ""))
   "A useful placeholder for a menu separator.")
+
+
+(defmethod bkmk-validate-obj ((bkmk-obj bkmk-separator))
+  "Currently there are no extra invariants for bkmk-separator"
+  t)
 
 (provide 'bkmk-eieio)
 ;;; bkmk-eieio.el ends here
